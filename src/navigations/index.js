@@ -1,13 +1,17 @@
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 
 import AuthNavigator from "./auth-navigator";
+import HomeNavigator from "./home-navigator";
+import Paranyama from "./app-navigator";
 
 const RootNavigator = createSwitchNavigator(
     {
-        Auth: AuthNavigator
+        Auth: AuthNavigator,
+        Home: HomeNavigator,
+        Paranyama: Paranyama
     },
     {
-        initialRouteName: 'Auth',
+        initialRouteName: 'Home',
     }
 );
 
