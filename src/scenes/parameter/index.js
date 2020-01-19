@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, Button, ListItem, Text, Icon, Left, Body, Right, Switch, Separator } from 'native-base';
 
-export default class ParameterScreen extends Component {
+export class ParameterScreen extends Component {
   render() {
     return (
       <Container>
-        <Header />
         <Content>
           <Separator bordered>
             <Text>Basic Information</Text>
           </Separator>
-          <ListItem icon>
+          <ListItem 
+            icon
+            onPress={() => {
+              this.props.navigation.navigate('Profile')
+            }}
+          
+          >
             <Left>
               <Button style={{ backgroundColor: "#FF9501" }}>
                 <Icon active name="wifi" />

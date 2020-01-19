@@ -1,14 +1,16 @@
 import React, { Component } from "react";
 import { createBottomTabNavigator } from "react-navigation-tabs";
-import ParanyamaScreen from "../scenes/pranayama";
+import ParanyamaScreen from "../scenes/pranayama/route";
 import HistoryScreen from "../scenes/history";
-import ParameterScreen from "../scenes/parameter";
+import ParameterScreen from "../scenes/parameter/route";
 import { View, Text } from "native-base";
 
 const AuthNavigatorConfig = {
     initialRouteName: 'Paranyama',
     header: null,
-    headerMode: 'none'
+    headerMode: 'none',
+    swipeEnabled: true,
+    tabBarPosition: 'bottom',
 };
 
 const RouteConfigs = {

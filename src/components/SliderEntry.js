@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { ParallaxImage } from 'react-native-snap-carousel';
 import styles from '../styles/SliderEntry.style';
 import { SliderFormSubmit, SliderFormBehaviour, SliderFormMain, SliderFormToWorkOn } from "../components/organisms/welcomeSliderForm";
+import { withNavigation } from "react-navigation";
 
-
-export default class SliderEntry extends Component {
+class SliderEntry extends Component {
 
     static propTypes = {
         data: PropTypes.object.isRequired,
@@ -76,3 +76,5 @@ export default class SliderEntry extends Component {
         );
     }
 }
+
+export default withNavigation(SliderEntry);

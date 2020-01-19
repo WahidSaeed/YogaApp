@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, StatusBar } from "react-native";
-import styles, { colors } from "../../styles/index.style";
+import styles, { colors } from "../../../styles/index.style";
 import { List, ListItem, Body, Left, Right, Thumbnail, Icon, Button } from "native-base";
 
 export default class CourseScreen extends Component {
@@ -19,7 +19,7 @@ export default class CourseScreen extends Component {
                     <List>
                         <ListItem>
                             <Body>
-                                <Text>State Of Mind Wanted</Text>
+                                <Text>21 Day Modi Shodhana</Text>
                             </Body>
                             <Right>
                                 <Text>></Text>
@@ -27,7 +27,39 @@ export default class CourseScreen extends Component {
                         </ListItem>
                         <ListItem>
                             <Body>
-                                <Text>Course Offered</Text>
+                                <Text>40 Day 3 Minute</Text>
+                            </Body>
+                            <Right>
+                                <Text>></Text>
+                            </Right>
+                        </ListItem>
+                        <ListItem>
+                            <Body>
+                                <Text>40 Day 7 Minute</Text>
+                            </Body>
+                            <Right>
+                                <Text>></Text>
+                            </Right>
+                        </ListItem>
+                        <ListItem>
+                            <Body>
+                                <Text>More Courses</Text>
+                            </Body>
+                            <Right>
+                                <Text>></Text>
+                            </Right>
+                        </ListItem>
+                        <ListItem>
+                            <Body>
+                                <Text>Upgrade to Intermediate Package</Text>
+                            </Body>
+                            <Right>
+                                <Text>></Text>
+                            </Right>
+                        </ListItem>
+                        <ListItem>
+                            <Body>
+                                <Text>Upgrade to Advance Package</Text>
                             </Body>
                             <Right>
                                 <Text>></Text>

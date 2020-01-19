@@ -18,11 +18,11 @@ const RootNavigator = createAnimatedSwitchNavigator(
         transition: (
             <Transition.Together>
               <Transition.Out
-                type="slide-bottom"
+                type="slide-left"
                 durationMs={400}
-                interpolation="easeIn"
+                interpolation="linear"
               />
-              <Transition.In type="fade" durationMs={500} />
+              <Transition.In type="slide-right" durationMs={500} />
             </Transition.Together>
           ),
     }
