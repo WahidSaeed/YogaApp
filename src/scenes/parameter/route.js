@@ -4,6 +4,15 @@ import { ParameterScreen } from "./index";
 import ProfileScreen from "./profile";
 const ParameterNavigatorConfig = {
     initialRouteName: 'Parameter',
+    defaultNavigationOptions: {
+        headerStyle: {
+            backgroundColor: '#165BAA',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+            fontWeight: 'bold',
+        },
+    },
 };
 
 const RouteConfigs = {

@@ -7,10 +7,19 @@ import { View, Text } from "native-base";
 
 const AuthNavigatorConfig = {
     initialRouteName: 'Paranyama',
-    header: null,
-    headerMode: 'none',
     swipeEnabled: true,
     tabBarPosition: 'bottom',
+    tabBarOptions: {
+        activeTintColor: '#fff',
+        labelStyle: {
+          fontSize: 12,
+          fontWeight: 'bold'
+        },
+        style: {
+          backgroundColor: '#165BAA',
+          padding: 16
+        },
+      },
 };
 
 const RouteConfigs = {

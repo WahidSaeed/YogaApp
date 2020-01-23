@@ -9,54 +9,40 @@ function wp (percentage) {
     return Math.round(value);
 }
 
-const slideHeight = viewportHeight * 0.8;
-const slideWidth = wp(90);
-const itemHorizontalMargin = wp(5);
+const slideHeight = viewportHeight * 1;
+const slideWidth = wp(100);
+const itemHorizontalMargin = wp(0);
 
 export const sliderWidth = viewportWidth;
 export const itemWidth = slideWidth + itemHorizontalMargin * 2;
 
-const entryBorderRadius = 8;
+const entryBorderRadius = 0;
 
 export default StyleSheet.create({
     slideInnerContainer: {
         width: itemWidth,
         height: slideHeight,
-        paddingHorizontal: itemHorizontalMargin,
-        paddingBottom: 18, // needed for shadow
+        //paddingHorizontal: itemHorizontalMargin,
+        //paddingBottom: 18, // needed for shadow
         justifyContent: 'center' 
     },
     shadow: {
+        ...StyleSheet.absoluteFillObject,
         position: 'absolute',
-        top: 0,
-        left: itemHorizontalMargin,
-        right: itemHorizontalMargin,
-        bottom: 18,
-        shadowColor: colors.black,
-        shadowOpacity: 0.25,
-        shadowOffset: { width: 0, height: 10 },
-        shadowRadius: 10,
-        borderRadius: entryBorderRadius
+        opacity: 0.7,
+        backgroundColor: '#165BAA'
     },
     imageContainer: {
         flex: 1,
         marginBottom: IS_IOS ? 0 : -1, // Prevent a random Android rendering issue
-        backgroundColor: 'white',
-        borderTopLeftRadius: entryBorderRadius,
-        borderTopRightRadius: entryBorderRadius,
-        borderBottomLeftRadius: entryBorderRadius,
-        borderBottomRightRadius: entryBorderRadius,
+        backgroundColor: 'white'
     },
     imageContainerEven: {
         backgroundColor: colors.black
     },
     image: {
         ...StyleSheet.absoluteFillObject,
-        resizeMode: 'cover',
-        borderRadius: IS_IOS ? entryBorderRadius : 0,
-        borderTopLeftRadius: entryBorderRadius,
-        borderTopRightRadius: entryBorderRadius,
-        opacity: 0.25
+        resizeMode: 'cover'
     },
     // image's border radius is buggy on iOS; let's hack it!
     radiusMask: {
@@ -75,7 +61,6 @@ export default StyleSheet.create({
         paddingTop: 20 - entryBorderRadius,
         paddingBottom: 20,
         paddingHorizontal: 16,
-        backgroundColor: 'white',
         position: 'absolute',
         alignSelf: 'center',
         width: itemWidth * 0.7

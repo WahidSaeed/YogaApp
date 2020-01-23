@@ -22,7 +22,7 @@ class SliderEntry extends Component {
 
         return parallax ? (
             <ParallaxImage
-              source={{ uri: illustration }}
+              source={illustration}
               containerStyle={[styles.imageContainer, even ? styles.imageContainerEven : {}]}
               style={styles.image}
               parallaxFactor={0.35}
@@ -43,9 +43,9 @@ class SliderEntry extends Component {
       }
 
     render () {
-        const { even, screenNumber } = this.props;
+        const { even, screenNumber, data: { overlayColor } } = this.props;
         
-        const FormViews = (props) => {
+        const FormViews = () => {
             if (screenNumber === 0) {
                 return <SliderFormMain />
             } else if (screenNumber === 1) {
@@ -63,12 +63,11 @@ class SliderEntry extends Component {
             <TouchableOpacity
               activeOpacity={1}
               style={styles.slideInnerContainer}
-            //   onPress={() => { alert(`You've clicked '${title}'`); }}
               >
-                <View style={styles.shadow} />
                 <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
                     { this.image }
                 </View>
+                <View style={[styles.shadow, { backgroundColor: overlayColor }]} />
                 <View style={[styles.textContainer]}>
                     <FormViews  />
                 </View>

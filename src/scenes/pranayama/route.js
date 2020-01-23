@@ -6,12 +6,21 @@ import StateOfMindScreen from "./stateofmind";
 
 const ParanyamaNavigatorConfig = {
     initialRouteName: 'Paranyama',
+    defaultNavigationOptions: {
+      headerStyle: {
+          backgroundColor: '#165BAA',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+          fontWeight: 'bold',
+      },
+  },
 };
 
 const RouteConfigs = {
     Paranyama: ParanyamaScreen,
     Course: CourseScreen,
-    StateOfMind: StateOfMindScreen 
+    StateOfMind: StateOfMindScreen
 };
 
 const ParanyamaNavigator = createStackNavigator(RouteConfigs, ParanyamaNavigatorConfig);

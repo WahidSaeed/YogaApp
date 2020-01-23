@@ -2,21 +2,25 @@ export const ENTRIES1 = [
     {
         title: 'Welcome - Please Fill',
         subtitle: 'Tell Us More About You',
-        illustration: 'https://i.imgur.com/UYiroysl.jpg'
+        illustration: require('../statics/images/Wallpaper_1.png'),
+        overlayColor: '#165BAA'
     },
     {
         title: 'Define Yourself',
         subtitle: 'How Would You Like to Define Youself',
-        illustration: 'https://i.imgur.com/UPrs1EWl.jpg'
+        illustration: require('../statics/images/Wallpaper_2.jpg'),
+        overlayColor: '#A155B9'
     },
     {
         title: 'Focus On More',
         subtitle: 'What Would You Like To Focus On More',
-        illustration: 'https://i.imgur.com/MABUbpDl.jpg'
+        illustration: require('../statics/images/Wallpaper_3.jpg'),
+        overlayColor: '#165BAA'
     },
     {
         title: 'Acrocorinth, Greece',
         subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-        illustration: 'https://i.imgur.com/KZsmUi2l.jpg'
+        illustration: require('../statics/images/Wallpaper_4.jpg'),
+        overlayColor: '#165BAA'
     }
 ];

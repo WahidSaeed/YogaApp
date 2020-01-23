@@ -6,7 +6,6 @@ import { sliderWidth, itemWidth } from '../../styles/SliderEntry.style';
 import SliderEntry from '../../components/SliderEntry';
 import styles, { colors } from '../../styles/index.style';
 import { ENTRIES1 } from '../../statics/entries';
-import { Container, Content, Button } from "native-base";
 
 const IS_ANDROID = Platform.OS === 'android';
 const SLIDER_1_FIRST_ITEM = 0;
@@ -36,8 +35,10 @@ export default class WelcomeScreen extends Component {
         const { slider1ActiveSlide } = this.state;
 
         return (
-            <Container style={styles.exampleContainer}>
-              <Content>
+            <View>
+                <StatusBar
+                    hidden={true}
+                />
                 <Carousel
                   ref={c => this._slider1Ref = c}
                   data={ENTRIES1}
@@ -46,28 +47,29 @@ export default class WelcomeScreen extends Component {
                   itemWidth={itemWidth}
                   hasParallaxImages={true}
                   firstItem={SLIDER_1_FIRST_ITEM}
-                  inactiveSlideScale={0.94}
-                  inactiveSlideOpacity={0.7}
-                  inactiveSlideShift={20}
+                  inactiveSlideScale={1}
+                  inactiveSlideOpacity={1}
+                  inactiveSlideShift={0}
                   containerCustomStyle={styles.slider}
                   contentContainerCustomStyle={styles.sliderContentContainer}
                   autoplay={false}
                   onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
                 />
-                <Pagination
-                  dotsLength={ENTRIES1.length}
-                  activeDotIndex={slider1ActiveSlide}
-                  containerStyle={styles.paginationContainer}
-                  dotColor={'rgba(255, 255, 255, 0.92)'}
-                  dotStyle={styles.paginationDot}
-                  inactiveDotColor={colors.black}
-                  inactiveDotOpacity={0.4}
-                  inactiveDotScale={0.6}
-                  carouselRef={this._slider1Ref}
-                  tappableDots={!!this._slider1Ref}
-                />
-                </Content>
-            </Container>
+                <View>
+                    <Pagination
+                        dotsLength={ENTRIES1.length}
+                        activeDotIndex={slider1ActiveSlide}
+                        containerStyle={styles.paginationContainer}
+                        dotColor={'rgba(255, 255, 255, 0.92)'}
+                        dotStyle={styles.paginationDot}
+                        inactiveDotColor={colors.black}
+                        inactiveDotOpacity={0.4}
+                        inactiveDotScale={0.6}
+                        carouselRef={this._slider1Ref}
+                        tappableDots={!!this._slider1Ref}
+                    />
+                </View>
+            </View>
         );
     }
     

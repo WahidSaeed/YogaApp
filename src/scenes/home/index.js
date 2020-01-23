@@ -1,9 +1,36 @@
 import React, { Component } from "react";
-import { View, Text, SafeAreaView, StatusBar } from "react-native";
+import { View, Text, SafeAreaView, StatusBar, FlatList, Image, TouchableOpacity } from "react-native";
 import styles, { colors } from "../../styles/index.style";
-import { StackedAreaChart } from "react-native-svg-charts";
-import { List, ListItem, Body, Left, Right, Thumbnail, Icon, Button } from "native-base";
+import { StackedAreaChart, Grid } from "react-native-svg-charts";
 import * as shape from "d3-shape";
+import Icon from "react-native-vector-icons/AntDesign";
+
+const ListItem = ({item}) => {
+    return (
+        <View 
+                style={{
+                    backgroundColor: '#165BAA',
+                    padding: 16,
+                    paddingHorizontal: 24,
+                    marginVertical: 8,
+                    borderRadius: 32,
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    elevation: 5
+                }}
+            >
+                <Text
+                    style={{
+                        color: '#fff'
+                    }}
+                >
+                    {item.title}
+                </Text>
+                <Text style={{ alignSelf: 'center', color: '#fff' }}>{item.value} b/m</Text>
+            </View>
+    );
+}
 
 export default class HomeScreen extends Component {
     constructor(props) {
@@ -15,9 +42,14 @@ export default class HomeScreen extends Component {
       }
     
     toggle() {
-        this.setState({
-            toggle: !this.state.toggle
-        });
+        if(this.state.toggle){
+            this.setState({
+                toggle: !this.state.toggle
+            });
+        }
+        else {
+            this.switchToParanyamaScreen();
+        }
     }
 
     switchToParanyamaScreen() {
@@ -29,13 +61,18 @@ export default class HomeScreen extends Component {
             return [
                 {
                     month: new Date(2015, 0, 1),
-                    right: 500,
-                    left: 500
+                    right: 0,
+                    left: 100
                 },
                 {
                     month: new Date(2015, 0, 1),
-                    right: 500,
-                    left: 500
+                    right: 200,
+                    left: 200
+                },
+                {
+                    month: new Date(2015, 0, 1),
+                    right: 600,
+                    left: 400
                 }
             ]
         } else {
@@ -85,71 +122,111 @@ export default class HomeScreen extends Component {
     }
 
     render() {
-        const _colors = [colors.background1, colors.background2];
+        const _colors = [colors.white, colors.background2];
         const keys = ['right', 'left'];
         const svgs = [
             { onPress: () => console.log('right') },
             { onPress: () => console.log('left') }
         ]
+        const DATA = [
+            {
+                id: 0,
+                title: 'Average Breath Per Minutes',
+                value: 12
+            },
+            {
+                id: 1,
+                title: 'Volume Breath Right Nostril Per Minutes',
+                value: 12
+            },
+            {
+                id: 2,
+                title: 'Volume Breath Left Nostril Per Minutes',
+                value: 12
+            },
+            {
+                id: 3,
+                title: 'Volume Total Inhale Per Minutes',
+                value: 12
+            }
+        ];
 
         return(
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
                     <StatusBar
-                      translucent={false}
-                      backgroundColor={'rgba(0, 0, 0, 0.0)'}
-                      barStyle={'dark-content'}
+                      hidden={true}
                     />
-                    {/* { this.gradient } */}
-                    <Text>Check Your Breath</Text>
                     <StackedAreaChart 
-                        style={ { height: 500, paddingVertical: 16 } }
+                        style={ { height: 500, backgroundColor: '#165BAA' } }
                         data={ this.returnData() }
                         keys={ keys }
                         colors={ _colors }
                         curve={ shape.curveNatural }
                         showGrid={ true }
-                        svgs={ svgs }
                         animate={true}
-                        animationDuration={300}
-                    />
-                    <List>
-                        <ListItem>
-                            <Body>
-                                <Text>Average Breath Per Minutes</Text>
-                            </Body>
-                            <Right>
-                                <Text>12 b/m</Text>
-                            </Right>
-                        </ListItem>
-                        <ListItem>
-                            <Body>
-                                <Text>Volume Breath Right Nostril Per Minutes</Text>
-                            </Body>
-                            <Right>
-                                <Text>43 b/m</Text>
-                            </Right>
-                        </ListItem>
-                        <ListItem>
-                            <Body>
-                                <Text>Volume Breath Left Nostril Per Minutes</Text>
-                            </Body>
-                            <Right>
-                                <Text>78 b/m</Text>
-                            </Right>
-                        </ListItem>
-                        <ListItem>
-                            <Body>
-                                <Text>Volume Total Inhale Per Minutes</Text>
-                            </Body>
-                            <Right>
-                                <Text>23 b/m</Text>
-                            </Right>
-                        </ListItem>
-                    </List>
-                    <Button onPress={() => { this.toggle() }}><Text>Play Button</Text></Button>
-                    <Text>View Suggested Exercise</Text>
-                    <Button onPress={() => { this.switchToParanyamaScreen() }}><Text>Good To Go</Text></Button>
+                    >
+                        <Grid
+                            belowChart={true}
+                        />
+                    </StackedAreaChart>
+
+                    <View
+                        style={{
+                            flex:1,
+                            flexDirection: 'row',
+                            alignSelf: 'center',
+                            alignItems: 'flex-end',
+                            position: 'absolute',
+                            height: 500,
+                            paddingBottom: 16
+                        }}
+                    >
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.toggle()
+                            }}
+                        >
+                            <View
+                                style={{
+                                    backgroundColor: '#870002',
+                                    height: 100,
+                                    width: 100,
+                                    borderRadius: 48,
+                                    elevation: 10
+                                }}
+                            >
+                                <Icon name="caretright" size={42} color='#fff'
+                                    style={{
+                                        alignSelf: 'center',
+                                        marginTop: 24
+                                    }}
+                                />
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View
+                        style={{
+                            flex: 1,
+                            backgroundColor: '#fff',
+                            paddingHorizontal: 16,
+                            paddingVertical: 24
+                        }}
+                    >
+                        <FlatList 
+                            data={DATA}
+                            renderItem={({item}) => {
+                                return <ListItem item={item}/>
+                            }}
+                            keyExtractor={item => item.id.toString()}
+                        />
+                        <Text
+                            style={{
+                                alignSelf: 'center'
+                            }}
+                        >View Suggested Exercise</Text>
+                    </View>
                 </View>
             </SafeAreaView>
         );
