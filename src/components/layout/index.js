@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { SafeAreaView, View } from "react-native";
 import style from "../../styles/index";
 
-export const Container = (prop) => <SafeAreaView style={style.Layout.container}>{prop.children}</SafeAreaView>
+export const Container = (prop) => <SafeAreaView style={[style.Layout.container, ]}>{prop.children}</SafeAreaView>
+
+export const ContainerWithPadding = (prop) => <SafeAreaView style={[style.Layout.containerWithPadding]}>{prop.children}</SafeAreaView>
 
 export const SelectContainer = (prop) => <View style={style.Select.Select}>{prop.children}</View>
 

@@ -178,9 +178,9 @@ export default class HomeScreen extends Component {
                         animate={true}
                         
                     >
-                        <Grid
+                        {/* <Grid
                             belowChart={true}
-                        />
+                        /> */}
                     </StackedAreaChart>
 
                     <DetailViewWrapper>

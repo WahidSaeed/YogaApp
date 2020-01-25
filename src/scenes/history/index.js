@@ -1,34 +1,8 @@
 import React, { Component } from "react";
 import { View, Text, StatusBar, FlatList, TouchableOpacity } from "react-native";
 import style from "../../styles/index";
-import { Header } from "native-base";
-import Icon from "react-native-vector-icons/AntDesign";
-
-const ListItem = ({item}) => {
-    return (
-        <TouchableOpacity
-                style={{
-                    backgroundColor: '#165BAA',
-                    padding: 16,
-                    paddingHorizontal: 24,
-                    marginVertical: 8,
-                    borderRadius: 32,
-                    flex: 1,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between'
-                }}
-            >
-                <Text
-                    style={{
-                        color: '#fff'
-                    }}
-                >
-                    {item.title}
-                </Text>
-                <Icon name="rightcircle" color="#fff" size={16}/>
-            </TouchableOpacity>
-    );
-}
+import ListItem from "./historylistitem";
+import { ContainerWithPadding } from "../../components/layout/index";
 
 const DATA = [
     {
@@ -49,26 +23,12 @@ const DATA = [
     }
 ]
 
-export default class HistoryScreen extends Component {
+export class HistoryScreen extends Component {
+    
     render() {
-
         return(
-            <View style={style.Layout.safeArea}>
-                <StatusBar
-                      translucent={false}
-                      backgroundColor={'rgba(0, 0, 0, 0.0)'}
-                      barStyle={'dark-content'}
-                    />
-                    <Header
-                        style={{
-                            backgroundColor: '#165BAA'
-                        }}
-                    />
-                <View style={[style.Layout.container, {
-                    padding: 16
-                }]}>
-                    
-                    <FlatList 
+            <ContainerWithPadding>
+                <FlatList 
                             data={DATA}
                             renderItem={({item}) => {
                                 return <ListItem item={item}/>
@@ -76,8 +36,7 @@ export default class HistoryScreen extends Component {
                             keyExtractor={item => item.id.toString()}
                             scrollEnabled={true}
                         />
-                </View>
-            </View>
+            </ContainerWithPadding>
         );
     }
 }

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { View, Text, StatusBar, FlatList, TouchableOpacity, Button } from "react-native";
-import style from "../../../styles/index";
+import style, {colors} from "../../../styles/index";
+import { ExersicePlayButton } from "../../../components/common/inputs/button";
+import { Container } from "../../../components/layout/index";
 import Icon from "react-native-vector-icons/AntDesign";
 
 export default class ExerciseScreen extends Component {
@@ -9,16 +11,35 @@ export default class ExerciseScreen extends Component {
         title: 'Exercise',
       }
 
+
+    switchToParanyama() {
+        this.props.navigation.navigate('Paranyama')
+    }
+
     render() {
 
         return(
-            <View style={style.Layout.safeArea}>
+            <Container>
                 <StatusBar
                     hidden={true}
                 />
-                <View style={[style.Layout.container, {
-                    padding: 16,
-                }]}>
+                    <View
+                        style={{
+                            flex: 1,
+                            alignItems: 'center',
+                            justifyContent: 'flex-end',
+                            marginBottom: 32,
+                        }}
+                    >
+                        <Text
+                            style={{
+                                fontSize: 40,
+                                fontWeight: 'bold'
+                            }}
+                        >
+                            Find Balance
+                        </Text>
+                    </View>
                     <View
                         style={{
                             flex: 1,
@@ -26,44 +47,78 @@ export default class ExerciseScreen extends Component {
                             justifyContent: 'center'
                         }}
                     >
-                        <Text
+                        <View
                             style={{
-                                fontSize: 32,
-                                fontWeight: 'bold'
-                            }}
-                        >
-                            Exercise Begins
-                        </Text>
-                    </View>
-                    <View
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            
-                        }}
-                    >
-                        <TouchableOpacity
-                            onPress={() => {
-                                this.props.navigation.navigate('Paranyama')
+                                flex: 1,
+                                flexDirection: 'row'
                             }}
                         >
                             <View
                                 style={{
-                                    height: 100,
-                                    width: 100,
-                                    backgroundColor: '#165BAA',
-                                    borderRadius: 48,
-                                    alignItems: 'center',
+                                    flex: 1,
+                                    alignItems: 'flex-end',
                                     justifyContent: 'center',
-                                    elevation: 10
+                                    marginRight: 52
                                 }}
                             >
-                            <Icon name="caretright" size={32} color="#fff"/>   
+                                <TouchableOpacity>
+                                    <Icon name="banckward" size={32}  />
+                                </TouchableOpacity>
                             </View>
-                        </TouchableOpacity>
+                            <View
+                                style={{
+                                    flex: 1,
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <ExersicePlayButton onButtonPress={this.switchToParanyama.bind(this)} />
+
+                                <Text
+                                    style={{
+                                        color: colors.darkText,
+                                        marginTop: 16
+                                    }}
+                                >-0:4</Text>
+                            </View>
+                            <View
+                                style={{
+                                    flex: 1,
+                                    justifyContent: 'center',
+                                    marginLeft: 52,
+                                }}
+                            >
+                                <TouchableOpacity>
+                                    <Icon name="forward" size={32}  />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                     </View>
-                </View>
-            </View>
+                    <View
+                        style={{
+                            flex: 1,
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            marginTop: 32,
+                        }}
+                    >
+                        <Text
+                            style={{
+                                fontSize: 24,
+                                fontWeight: 'bold'
+                            }}
+                        >
+                            Balance Music Name
+                        </Text>
+                        <Text
+                            style={[colors.subText, {
+                                textAlign: 'center',
+                                marginHorizontal: 32
+                            }]}
+                        >
+                            This is exercise description about how to do this exercise. This is exercise description about how to do this exercise. This is exercise description about how to do this exercise. This is exercise description about how to do this exercise.
+                        </Text>
+                    </View>
+            </Container>
         );
     }
 }

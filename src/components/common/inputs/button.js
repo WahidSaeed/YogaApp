@@ -14,14 +14,24 @@ export class PlayButton extends Component {
                 <View
                     style={style.Button.PlayButton}
                 >
-                    <Icon name="caretright" size={42} color={colors.white}
+                    <Icon name="caretright" size={32} color={colors.white}
                         style={{
                             alignSelf: 'center',
-                            marginTop: 24
                         }}
                     />
                 </View>
             </TouchableOpacity>
         );
+    }
+}
+
+
+export class ExersicePlayButton extends Component {
+    render() {
+        return(
+            <View style={style.Button.ExersicePlayButtonWrapper}>
+                <PlayButton {...this.props} />
+            </View>
+            )
     }
 }

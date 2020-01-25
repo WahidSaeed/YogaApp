@@ -4,7 +4,7 @@ import colors from './colors';
 
 export { metrics, colors };
 
-
+const entryBorderRadius = 8;
 
 const Slider = StyleSheet.create({
     slider: {
@@ -29,6 +29,11 @@ const Layout = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colors.white
+    },
+    containerWithPadding: {
+        flex: 1,
+        backgroundColor: colors.white,
+        padding: 16
     },
 });
 
@@ -61,10 +66,21 @@ const Select = StyleSheet.create({
 
 const Button = StyleSheet.create({
     PlayButton: {
+        justifyContent: 'center',
         backgroundColor: colors.red,
-        height: 100,
-        width: 100,
-        borderRadius: 48
+        height: 70,
+        width: 70,
+        borderRadius: 48,
+        elevation: 10
+    },
+    ExersicePlayButtonWrapper: {
+        backgroundColor: colors.secondaryColor,
+        height: 200,
+        width: 200,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 96,
+        elevation: 10
     }
 });
 
