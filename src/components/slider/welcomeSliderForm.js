@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import { View, Button, ScrollView, FlatList, TouchableWithoutFeedback } from "react-native";
 import { Item, Input, Thumbnail, Text } from "native-base";
 import Icon from "react-native-vector-icons/AntDesign";
+import { SelectDefault } from "../common/inputs/Select";
 
 export class SliderFormMain extends Component {
     
@@ -108,118 +109,38 @@ const PersonalityDATA = [
     },
 ];
 
-class ListItem extends Component {
-
-    state = {toggle: false};
-
-    render() {
-        const {item: {title}} = this.props;
-        console.log(this.props);
-        return (
-            <TouchableWithoutFeedback
-                onPress={() => {
-                    this.setState({
-                        toggle: !this.state.toggle
-                    })
-                }}
-            >
-                <View 
-                    style={{
-                        backgroundColor: '#fff',
-                        padding: 16,
-                        paddingHorizontal: 24,
-                        marginVertical: 8,
-                        borderRadius: 32,
-                        flex: 1,
-                        flexDirection: 'row',
-                        justifyContent: 'space-between'
-                    }}
-                >
-                    <Text>
-                        {title}
-                    </Text>
-                    {this.state.toggle && <Icon style={{ alignSelf: 'center' }} size={16} color={'#165BAA'} name="checkcircle" />}
-                </View>
-            </TouchableWithoutFeedback>
-        );
-    }
-}
-
 export class SliderFormBehaviour extends Component {
     
     render(){
         return(
-                <View
-                    style={{
-                        maxHeight:400,
-                        paddingHorizontal: 16,
-                        borderTopColor: '#fff',
-                        borderTopWidth: 4,
-                        borderBottomWidth: 4,
-                        borderBottomColor: '#fff'
-                    }}
-                >
-                    <ScrollView
-                        showsVerticalScrollIndicator={false}
-                    >
-                        <FlatList 
-                                data={PersonalityDATA}
-                                renderItem={({item}) => {
-                                    return <ListItem item={item}/>
-                                }}
-                                keyExtractor={item => item.Id.toString()}
-                            />
-                    </ScrollView>
-                </View>
+                <SelectDefault data={PersonalityDATA} />
         );
     }
 }
 
-const workOnData = [
-    {
-        Id: 1,
-        title: 'Mind'
-    },
-    {
-        Id: 2,
-        title: 'Body'
-    },
-    {
-        Id: 3,
-        title: 'Emotions'
-    },
-    {
-        Id: 4,
-        title: 'Ethic Body'
-    },
-];
-
 export class SliderFormToWorkOn extends Component {
-    
+        
     render(){
+        const workOnData = [
+            {
+                Id: 1,
+                title: 'Mind'
+            },
+            {
+                Id: 2,
+                title: 'Body'
+            },
+            {
+                Id: 3,
+                title: 'Emotions'
+            },
+            {
+                Id: 4,
+                title: 'Ethic Body'
+            },
+        ];
         return(
-                <View
-                    style={{
-                        maxHeight:400,
-                        paddingHorizontal: 16,
-                        borderTopColor: '#fff',
-                        borderTopWidth: 4,
-                        borderBottomWidth: 4,
-                        borderBottomColor: '#fff'
-                    }}
-                >
-                    <ScrollView
-                        showsVerticalScrollIndicator={false}
-                    >
-                        <FlatList 
-                                data={workOnData}
-                                renderItem={({item}) => {
-                                    return <ListItem item={item}/>
-                                }}
-                                keyExtractor={item => item.Id.toString()}
-                            />
-                    </ScrollView>
-                </View>
+                <SelectDefault data={workOnData} />
         );
     }
 }

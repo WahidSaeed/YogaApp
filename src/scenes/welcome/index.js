@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Platform, View, ScrollView, Text, StatusBar, SafeAreaView } from 'react-native';
+import { Platform, View, StatusBar, SafeAreaView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { sliderWidth, itemWidth } from '../../styles/SliderEntry.style';
-import SliderEntry from '../../components/SliderEntry';
-import styles, { colors } from '../../styles/index.style';
+import SliderEntry from '../../components/slider/SliderEntry';
+import { Container } from "../../components/layout/index";
+import style , { colors } from '../../styles/index';
 import { ENTRIES1 } from '../../statics/entries';
 
 const IS_ANDROID = Platform.OS === 'android';
@@ -31,14 +32,11 @@ export default class WelcomeScreen extends Component {
         );
     }
 
-    mainExample () {
+    main () {
         const { slider1ActiveSlide } = this.state;
 
         return (
             <View>
-                <StatusBar
-                    hidden={true}
-                />
                 <Carousel
                   ref={c => this._slider1Ref = c}
                   data={ENTRIES1}
@@ -50,8 +48,7 @@ export default class WelcomeScreen extends Component {
                   inactiveSlideScale={1}
                   inactiveSlideOpacity={1}
                   inactiveSlideShift={0}
-                  containerCustomStyle={styles.slider}
-                  contentContainerCustomStyle={styles.sliderContentContainer}
+                  containerCustomStyle={style.Slider.slider}
                   autoplay={false}
                   onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
                 />
@@ -59,10 +56,10 @@ export default class WelcomeScreen extends Component {
                     <Pagination
                         dotsLength={ENTRIES1.length}
                         activeDotIndex={slider1ActiveSlide}
-                        containerStyle={styles.paginationContainer}
+                        //containerStyle={styles.paginationContainer}
                         dotColor={'rgba(255, 255, 255, 0.92)'}
-                        dotStyle={styles.paginationDot}
-                        inactiveDotColor={colors.black}
+                        dotStyle={style.Pagination.paginationDot}
+                        inactiveDotColor={colors.dark}
                         inactiveDotOpacity={0.4}
                         inactiveDotScale={0.6}
                         carouselRef={this._slider1Ref}
@@ -76,28 +73,23 @@ export default class WelcomeScreen extends Component {
     get gradient () {
         return (
             <LinearGradient
-              colors={[colors.background1, colors.background2]}
+              colors={[colors.primaryColor, colors.secondaryColor]}
               startPoint={{ x: 1, y: 0 }}
               endPoint={{ x: 0, y: 1 }}
-              style={styles.gradient}
+              style={style.Gradient.gradient}
             />
         );
     }
 
     render () {
-        const example1 = this.mainExample();
+        const mainView = this.main();
         return (
-            <SafeAreaView style={styles.safeArea}>
-                <View style={styles.container}>
-                    <StatusBar
-                      translucent={false}
-                      backgroundColor={'rgba(0, 0, 0, 0.0)'}
-                      barStyle={'dark-content'}
-                    />
-                    {/* { this.gradient } */}
-                    { example1 }
-                </View>
-            </SafeAreaView>
+            <Container>
+                <StatusBar
+                    hidden={true}
+                />
+                { mainView }
+            </Container>
         );
     }
 }

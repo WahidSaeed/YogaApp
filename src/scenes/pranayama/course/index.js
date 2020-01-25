@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, StatusBar, FlatList, TouchableOpacity } from "react-native";
-import styles, { colors } from "../../../styles/index.style";
+import style from "../../../styles/index";
 import Icon from "react-native-vector-icons/AntDesign";
 
 const ListItem = ({item, navigation}) => {
@@ -72,8 +72,8 @@ export default class CourseScreen extends Component {
     render() {
 
         return(
-            <View style={styles.safeArea}>
-                <View style={[styles.container, {
+            <View style={style.Layout.safeArea}>
+                <View style={[style.Layout.container, {
                     padding: 16
                 }]}>
                     <FlatList 

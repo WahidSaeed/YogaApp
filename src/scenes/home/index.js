@@ -1,23 +1,23 @@
 import React, { Component } from "react";
-import { View, Text, SafeAreaView, StatusBar, FlatList, Image, TouchableOpacity } from "react-native";
-import styles, { colors } from "../../styles/index.style";
+import { View, Text, StatusBar, FlatList } from "react-native";
+import { colors } from "../../styles/index";
+import { Container } from "../../components/layout/index";
+import { PlayButton } from "../../components/common/inputs/button";
 import { StackedAreaChart, Grid } from "react-native-svg-charts";
 import * as shape from "d3-shape";
-import Icon from "react-native-vector-icons/AntDesign";
 
 const ListItem = ({item}) => {
     return (
         <View 
                 style={{
-                    backgroundColor: '#165BAA',
+                    backgroundColor: colors.primaryColor,
                     padding: 16,
                     paddingHorizontal: 24,
                     marginVertical: 8,
                     borderRadius: 32,
                     flex: 1,
                     flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    elevation: 5
+                    justifyContent: 'space-between'
                 }}
             >
                 <Text
@@ -31,6 +31,13 @@ const ListItem = ({item}) => {
             </View>
     );
 }
+
+const DetailViewWrapper = (prop) => <View 
+                                        style={{ 
+                                            flex: 1, 
+                                            backgroundColor: '#fff', 
+                                            paddingHorizontal: 16, 
+                                            paddingVertical: 24}}>{prop.children}</View>
 
 export default class HomeScreen extends Component {
     constructor(props) {
@@ -122,7 +129,7 @@ export default class HomeScreen extends Component {
     }
 
     render() {
-        const _colors = [colors.white, colors.background2];
+        const _colors = [colors.white, colors.secondaryColor];
         const keys = ['right', 'left'];
         const svgs = [
             { onPress: () => console.log('right') },
@@ -152,68 +159,39 @@ export default class HomeScreen extends Component {
         ];
 
         return(
-            <SafeAreaView style={styles.safeArea}>
-                <View style={styles.container}>
+            <Container>
                     <StatusBar
                       hidden={true}
                     />
                     <StackedAreaChart 
-                        style={ { height: 500, backgroundColor: '#165BAA' } }
+                        style={ { 
+                            flex: 1, 
+                            backgroundColor: colors.primaryColor,
+                            borderBottomColor: colors.white,
+                            borderBottomWidth: 1
+                        } }
                         data={ this.returnData() }
                         keys={ keys }
                         colors={ _colors }
                         curve={ shape.curveNatural }
                         showGrid={ true }
                         animate={true}
+                        
                     >
                         <Grid
                             belowChart={true}
                         />
                     </StackedAreaChart>
 
-                    <View
-                        style={{
-                            flex:1,
-                            flexDirection: 'row',
-                            alignSelf: 'center',
-                            alignItems: 'flex-end',
-                            position: 'absolute',
-                            height: 500,
-                            paddingBottom: 16
-                        }}
-                    >
-                        <TouchableOpacity
-                            onPress={() => {
-                                this.toggle()
+                    <DetailViewWrapper>
+                        <PlayButton 
+                            style={{
+                                alignSelf: 'center',
+                                position: 'relative',
+                                bottom: 24
                             }}
-                        >
-                            <View
-                                style={{
-                                    backgroundColor: '#870002',
-                                    height: 100,
-                                    width: 100,
-                                    borderRadius: 48,
-                                    elevation: 10
-                                }}
-                            >
-                                <Icon name="caretright" size={42} color='#fff'
-                                    style={{
-                                        alignSelf: 'center',
-                                        marginTop: 24
-                                    }}
-                                />
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+                            onButtonPress={this.toggle.bind(this)} />
 
-                    <View
-                        style={{
-                            flex: 1,
-                            backgroundColor: '#fff',
-                            paddingHorizontal: 16,
-                            paddingVertical: 24
-                        }}
-                    >
                         <FlatList 
                             data={DATA}
                             renderItem={({item}) => {
@@ -226,9 +204,8 @@ export default class HomeScreen extends Component {
                                 alignSelf: 'center'
                             }}
                         >View Suggested Exercise</Text>
-                    </View>
-                </View>
-            </SafeAreaView>
+                    </DetailViewWrapper>
+            </Container>
         );
     }
 }

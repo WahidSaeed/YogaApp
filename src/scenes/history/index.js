@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, StatusBar, FlatList, TouchableOpacity } from "react-native";
-import styles, { colors } from "../../styles/index.style";
+import style from "../../styles/index";
 import { Header } from "native-base";
 import Icon from "react-native-vector-icons/AntDesign";
 
@@ -53,7 +53,7 @@ export default class HistoryScreen extends Component {
     render() {
 
         return(
-            <View style={styles.safeArea}>
+            <View style={style.Layout.safeArea}>
                 <StatusBar
                       translucent={false}
                       backgroundColor={'rgba(0, 0, 0, 0.0)'}
@@ -64,7 +64,7 @@ export default class HistoryScreen extends Component {
                             backgroundColor: '#165BAA'
                         }}
                     />
-                <View style={[styles.container, {
+                <View style={[style.Layout.container, {
                     padding: 16
                 }]}>
                     

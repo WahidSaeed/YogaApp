@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, StatusBar, FlatList, TouchableOpacity, Button } from "react-native";
-import styles, { colors } from "../../../styles/index.style";
+import style from "../../../styles/index";
 import Icon from "react-native-vector-icons/AntDesign";
 
 export default class ExerciseScreen extends Component {
@@ -12,11 +12,11 @@ export default class ExerciseScreen extends Component {
     render() {
 
         return(
-            <View style={styles.safeArea}>
+            <View style={style.Layout.safeArea}>
                 <StatusBar
                     hidden={true}
                 />
-                <View style={[styles.container, {
+                <View style={[style.Layout.container, {
                     padding: 16,
                 }]}>
                     <View

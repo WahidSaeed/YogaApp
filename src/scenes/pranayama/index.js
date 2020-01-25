@@ -1,7 +1,47 @@
 import React, { Component } from "react";
 import { View, Text, StatusBar, TouchableOpacity, Image } from "react-native";
-import styles, { colors } from "../../styles/index.style";
-import { List, ListItem, Body, Left, Right, Thumbnail, Icon, Button } from "native-base";
+import style, { colors } from "../../styles/index";
+import { Container } from "../../components/layout/index";
+
+const ParanyamaWrapper = (prop) => <View
+                                        style={{
+                                            flexDirection: "row",
+                                            flex: 1,
+                                            justifyContent: "center",
+                                            margin: 16,
+                                            borderRadius: 16,
+                                            overflow: 'hidden'
+                                        }}
+                                    >{prop.children}</View>
+
+const ParanyamaButton = (prop) => (<TouchableOpacity style={[{
+                                        flex: 1,
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        overflow: 'hidden'
+                                    }, prop.style]}
+                                    onPress={prop.switchTo}
+                                    >
+                                    <Image 
+                                        source={prop.ImageSource}
+                                        style={{
+                                            position: 'absolute',
+                                            opacity: 0.5
+                                        }}
+                                    />
+                                    <View>
+                                        <View>
+                                            <Text
+                                                style={{
+                                                    fontSize: 32,
+                                                    textAlign: 'center',
+                                                    fontWeight: 'bold',
+                                                    color: colors.white
+                                                }}
+                                            >{prop.title}</Text>
+                                        </View>
+                                    </View>
+                                    </TouchableOpacity>)
 
 export class ParanyamaScreen extends Component {
 
@@ -9,122 +49,37 @@ export class ParanyamaScreen extends Component {
         title: 'Paranyama',
       }
 
+    switchToStateOfMind() {
+        this.props.navigation.navigate('StateOfMind');
+    }
+
+    switchToCourse() {
+        this.props.navigation.navigate('Course');
+    }
+      
     render() {
 
         return(
-            <View style={styles.safeArea}>
-                <View style={styles.container}>
-                    <View
+            <Container>
+                <ParanyamaWrapper>
+                    <ParanyamaButton
+                        title="State of Mind Wanted"
+                        ImageSource={require("../../statics/images/Wallpaper_5_Half.jpg")}
+                        switchTo={this.switchToStateOfMind.bind(this)}
                         style={{
-                            flexDirection: "row",
-                            flex: 1,
-                            justifyContent: "center",
-                            backgroundColor: '#A155B9',
+                            backgroundColor: colors.primaryColor,
                         }}
-                    >
-                        <TouchableOpacity style={{
-                                flex: 1,
-                                alignItems: "center",
-                                justifyContent: "center",
-                                backgroundColor: '#165BAA',
-                                overflow: 'hidden',
-                                borderTopStartRadius: 16,
-                                borderBottomStartRadius: 16,
-                                marginVertical: 16,
-                                marginLeft: 16,
-                                elevation: 5
-
-                            }}
-                            onPress={() => {
-                                this.props.navigation.navigate('StateOfMind');
-                            }}
-                            >
-                            <Image 
-                                source={require('../../statics/images/Wallpaper_5_Half.jpg')}
-                                style={{
-                                    position: 'absolute',
-                                    opacity: 0.5
-                                }}
-                            />
-                            <View>
-                                <View>
-                                    <Text
-                                        style={{
-                                            fontSize: 32,
-                                            textAlign: 'center',
-                                            fontWeight: 'bold',
-                                            color: '#fff'
-                                        }}
-                                    >State Of Mind Wanted</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{
-                                flex: 1,
-                                alignItems: "center",
-                                justifyContent: "center",
-                                backgroundColor: '#A155B9',
-                                overflow: 'hidden',
-                                borderTopEndRadius: 16,
-                                borderBottomEndRadius: 16,
-                                marginVertical: 16,
-                                marginRight: 16,
-                                elevation: 5
-                            }}
-                            onPress={() => {
-                                this.props.navigation.navigate('Course');
-                            }}
-                            >
-                            <Image 
-                                source={require('../../statics/images/Wallpaper_4_Half.jpg')}
-                                style={{
-                                    position: 'absolute',
-                                    opacity: 0.5
-                                }}
-                            />
-                            <View>
-                                <View>
-                                    <Text
-                                        style={{
-                                            fontSize: 32,
-                                            textAlign: 'center',
-                                            fontWeight: 'bold',
-                                            color: '#fff'
-                                        }}
-                                    >Course <Text /> Offered</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                    {/* <List>
-                        <ListItem
-                                onPress={() => {
-                                    this.props.navigation.navigate('StateOfMind');
-                                }}
-                            >
-                            <Body>
-                                <Text>State Of Mind Wanted</Text>
-                            </Body>
-                            <Right>
-                                <Text>></Text>
-                            </Right>
-                        </ListItem>
-                        
-                        <ListItem
-                                onPress={() => {
-                                    this.props.navigation.navigate('Course');
-                                }}
-                            >
-                            <Body>
-                                <Text>Course Offered</Text>
-                            </Body>
-                            <Right>
-                                <Text>></Text>
-                            </Right>
-                        </ListItem>
-                    </List> */}
-                </View>
-            </View>
+                    />
+                    <ParanyamaButton
+                        title="Course  Offered"
+                        ImageSource={require("../../statics/images/Wallpaper_4_Half.jpg")}
+                        switchTo={this.switchToCourse.bind(this)}
+                        style={{
+                            backgroundColor: colors.secondaryColor,
+                        }}
+                    />
+                </ParanyamaWrapper>
+            </Container>
         );
     }
 }

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { ParallaxImage } from 'react-native-snap-carousel';
-import styles from '../styles/SliderEntry.style';
-import { SliderFormSubmit, SliderFormBehaviour, SliderFormMain, SliderFormToWorkOn } from "../components/organisms/welcomeSliderForm";
+import styles from '../../styles/SliderEntry.style';
+import { SliderFormSubmit, SliderFormBehaviour, SliderFormMain, SliderFormToWorkOn } from "./welcomeSliderForm";
 import { withNavigation } from "react-navigation";
 
 class SliderEntry extends Component {
@@ -60,8 +60,7 @@ class SliderEntry extends Component {
         }
 
         return (
-            <TouchableOpacity
-              activeOpacity={1}
+            <View
               style={styles.slideInnerContainer}
               >
                 <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
@@ -71,7 +70,7 @@ class SliderEntry extends Component {
                 <View style={[styles.textContainer]}>
                     <FormViews  />
                 </View>
-            </TouchableOpacity>
+            </View>
         );
     }
 }
