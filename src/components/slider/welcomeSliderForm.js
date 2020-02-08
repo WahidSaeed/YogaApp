@@ -88,7 +88,8 @@ export class SliderFormMain extends Component {
                 <P
                     style={{
                         color: colors.white,
-                        marginVertical: 8
+                        marginVertical: 8,
+                        textAlign: 'center'
                     }}
                 >
                     Why do we ask? Becoming pranic helps you find the best breathing 
