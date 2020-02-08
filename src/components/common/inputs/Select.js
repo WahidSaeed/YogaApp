@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import { TouchableOpacity, Text, FlatList } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 import { SelectContainer, SelectItemContainer } from "../../layout/index";
+import { colors } from "../../../styles";
 
 class SelectItem extends Component {
 
     state = {toggle: false};
 
     render() {
-        const {item: {title}} = this.props;
+        const {item: {title}, isModal} = this.props;
         return (
             <TouchableOpacity
                 onPress={() => {
@@ -17,11 +18,15 @@ class SelectItem extends Component {
                     })
                 }}
             >
-                <SelectItemContainer>
-                    <Text>
+                <SelectItemContainer isModal={isModal}>
+                    <Text
+                        style={{
+                            color: (isModal ? colors.white: colors.darkText)
+                        }}
+                    >
                         {title}
                     </Text>
-                    {this.state.toggle && <Icon style={{ alignSelf: 'center' }} size={16} color={'#165BAA'} name="checkcircle" />}
+                    {this.state.toggle && <Icon style={{ alignSelf: 'center' }} size={16} color={(isModal ? colors.white : colors.primaryColor)} name="checkcircle" />}
                 </SelectItemContainer>
             </TouchableOpacity>
         );
@@ -31,13 +36,13 @@ class SelectItem extends Component {
 export class SelectDefault extends Component {
 
     render() {
-        const { data } = this.props;
+        const { data, isModal } = this.props;
         return (
-            <SelectContainer>
+            <SelectContainer isModal={isModal}>
                 <FlatList 
                     data={data}
                     renderItem={({item}) => {
-                        return <SelectItem item={item}/>
+                        return <SelectItem item={item} {...this.props} />
                     }}
                     keyExtractor={item => item.Id.toString()}
                     showsVerticalScrollIndicator={false}

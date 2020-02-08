@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, View, StatusBar, SafeAreaView } from 'react-native';
+import { Platform, View, StatusBar } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { sliderWidth, itemWidth } from '../../styles/SliderEntry.style';

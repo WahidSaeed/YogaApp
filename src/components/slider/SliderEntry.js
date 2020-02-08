@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
 import PropTypes from 'prop-types';
 import { ParallaxImage } from 'react-native-snap-carousel';
 import styles from '../../styles/SliderEntry.style';
@@ -15,6 +15,14 @@ class SliderEntry extends Component {
         parallaxProps: PropTypes.object
     };
 
+
+    state = {
+        modalVisible: false,
+    };
+    
+    setModalVisible(visible) {
+        this.setState({modalVisible: visible});
+    }
 
 
     get image () {

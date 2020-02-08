@@ -50,17 +50,26 @@ const Select = StyleSheet.create({
         borderTopColor: colors.white,
         borderTopWidth: 4,
         borderBottomWidth: 4,
-        borderBottomColor: colors.white
+        borderBottomColor: colors.white,
+        borderRadius: 8
+    },
+    SelectModal: {
+        borderTopColor: colors.primaryColor,
+        borderBottomColor: colors.primaryColor,
     },
     SelectItem: {
         backgroundColor: colors.white,
         padding: 16,
         paddingHorizontal: 24,
-        marginVertical: 8,
+        marginVertical: 4,
         borderRadius: 32,
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between'
+    },
+    SelectItemModal: {
+        backgroundColor: colors.primaryColor,
+        color: colors.white
     }
 });
 
@@ -84,4 +93,28 @@ const Button = StyleSheet.create({
     }
 });
 
-export default { Layout, Slider, Pagination, Gradient, Select, Button }
+const Heading = StyleSheet.create({
+    H1: {
+        fontSize: 72,
+        fontFamily: 'Meditation',
+        letterSpacing: 8
+    },
+    H2: {
+        fontSize: 48,
+        fontFamily: 'Meditation',
+        letterSpacing: 4
+    },
+    P: {
+        color: colors.subText
+    }
+});
+
+const Loader = StyleSheet.create({
+    LoadingWrapper: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+})
+
+export default { Layout, Slider, Pagination, Gradient, Select, Button, Heading, Loader }

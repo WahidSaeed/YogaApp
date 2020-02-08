@@ -3,122 +3,212 @@ import { View, Text, StatusBar, FlatList, TouchableOpacity, Button } from "react
 import style, {colors} from "../../../styles/index";
 import { ExersicePlayButton } from "../../../components/common/inputs/button";
 import { Container } from "../../../components/layout/index";
+import { H1, H2, P } from "../../../components/common/inputs/heading";
+import { DefaultLoading } from "../../../components/common/loader";
 import Icon from "react-native-vector-icons/AntDesign";
+import { Player as AudioPlayer } from "@react-native-community/audio-toolkit";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { ExerciseCreators } from "../../../statemanagement/creators/Exercise";
 
-export default class ExerciseScreen extends Component {
+const HeadingWrapper = (prop) =>  <View style={{
+                                        flex: 1,
+                                        alignItems: 'center',
+                                        justifyContent: 'flex-end',
+                                        marginBottom: 32,
+                                }}>{prop.children}</View>
+
+const PlayerWrapper = (prop) => <View style={{
+                                    flex: 1,
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                            }}>{prop.children}</View>
+
+const PlayerInnerWrapper = (prop) => <View style={{
+                                        flex: 1,
+                                        flexDirection: 'row'
+                                    }}>{prop.children}</View>
+
+const PlayerInnerWrapperLeft = (prop) => <View style={{
+                                            flex: 1,
+                                            alignItems: 'flex-end',
+                                            justifyContent: 'center',
+                                            marginRight: 52                                        
+                                        }}>{prop.children}</View>
+
+const PlayerInnerWrapperCenter = (prop) => <View style={{
+                                            flex: 1,
+                                            alignItems: 'center'
+                                        }}>{prop.children}</View>
+
+const PlayerInnerWrapperRight = (prop) => <View style={{
+                                            flex: 1,
+                                            justifyContent: 'center',
+                                            marginLeft: 52,
+                                        }}>{prop.children}</View>
+
+const PlayerExerciseDetail = (prop) => <View style={{
+                                        flex: 1,
+                                        justifyContent: 'flex-start',
+                                        alignItems: 'center',
+                                        marginTop: 32,
+                                    }}>{prop.children}</View>
+
+const PlayerAsideButton = (prop) => <TouchableOpacity onPress={prop.onPress}>
+                                        <Icon name={prop.name} size={32}  />
+                                    </TouchableOpacity>
+
+                        
+class ExerciseScreen extends Component {
 
     static navigationOptions = {
         title: 'Exercise',
       }
+    
+    state = {
+        Play: false,
+        Perpare: false,
+        Duration: 0,
+        CurrentExercise: 0,
+        Player: null
+    }
 
+    componentDidMount() {
+        const { requestExerciseData } = this.props;
+        requestExerciseData(3);
+    }
+
+    componentDidUpdate(prevProp, prevState) {
+        const prevCurrentExercise = prevState.CurrentExercise;
+        const nextCurrentExercise = this.state.CurrentExercise;
+        const { songURL } = this.props.exercise.payload[nextCurrentExercise];
+
+        if(prevCurrentExercise !== nextCurrentExercise) {
+            this.initPlayer(songURL);
+            // this.preparePlayer();
+            // this.exerciseStopPlay();
+        }
+    }
+
+    nextExercise() {
+        const { payload } = this.props.exercise;
+        const { CurrentExercise } = this.state;
+
+        if (payload[CurrentExercise + 1])
+            this.setState({
+                CurrentExercise: CurrentExercise + 1
+            })
+    }
+
+    prevExercise() {
+        const { payload } = this.props.exercise;
+        const { CurrentExercise } = this.state;
+        
+        if (payload[CurrentExercise - 1])
+            this.setState({
+                CurrentExercise: CurrentExercise - 1
+            })
+    }
 
     switchToParanyama() {
-        this.props.navigation.navigate('Paranyama')
+        this.setState({
+            Play: !this.state.Play
+        })
+    }
+
+        initPlayer(songURL) {
+        console.log('Name' + songURL);
+        if(songURL) {
+            new AudioPlayer(songURL, { autoDestroy : false }).play();
+            // Player.prepare((err) => {
+            //         this.setState({
+            //             Duration: (Player.duration * 0.001 * 0.0166667).toFixed(2),
+            //             Perpare: Player.isPrepared,
+            //             Play: true
+            //         })
+            //     });
+            // this.setState({
+            //     Player,
+            //     Play: false,
+            //     Perpare: false,
+            //     Duration: 0
+            // })
+        }
+    }
+
+    preparePlayer(Player) {
+        if(Player) {
+            //Player
+        }
+    }
+
+    exerciseStopPlay() {
+        const { Player, Perpare, Play } = this.state;
+
+        if (Perpare) {
+            if (Play) {
+                Player.play();
+            }
+            else {
+                Player.stop();
+            }
+        }
     }
 
     render() {
-
+        const { CurrentExercise } = this.state;
+        const { payload, isLoading, error } = this.props.exercise;
+        const { exersiceName, songURL, description } = payload[CurrentExercise];
+        // this.initPlayer(songURL);
+        // this.exerciseStopPlay();
         return(
             <Container>
                 <StatusBar
                     hidden={true}
                 />
-                    <View
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'flex-end',
-                            marginBottom: 32,
-                        }}
-                    >
-                        <Text
-                            style={{
-                                fontSize: 40,
-                                fontWeight: 'bold'
-                            }}
-                        >
-                            Find Balance
-                        </Text>
-                    </View>
-                    <View
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}
-                    >
-                        <View
-                            style={{
-                                flex: 1,
-                                flexDirection: 'row'
-                            }}
-                        >
-                            <View
+                    {isLoading && (<DefaultLoading />)}
+                    {!isLoading && !error && (
+                    <Container>
+                        <HeadingWrapper>
+                            <H1 style={{ textAlign: "center" }}>Find Balance</H1>
+                        </HeadingWrapper>
+                        <PlayerWrapper>
+                            <PlayerInnerWrapper>
+                                <PlayerInnerWrapperLeft>
+                                    <PlayerAsideButton onPress={this.prevExercise.bind(this)} name="banckward" />
+                                </PlayerInnerWrapperLeft>
+                                <PlayerInnerWrapperCenter>
+                                    <ExersicePlayButton isOnPlay={this.state.Play} onButtonPress={this.switchToParanyama.bind(this)} />
+                                    <Text
+                                        style={{
+                                            color: colors.darkText,
+                                            marginTop: 16
+                                        }}
+                                    >{this.state.Duration}</Text>
+                                </PlayerInnerWrapperCenter>
+                                <PlayerInnerWrapperRight>
+                                    <PlayerAsideButton onPress={this.nextExercise.bind(this)} name="forward" />
+                                </PlayerInnerWrapperRight>
+                            </PlayerInnerWrapper>
+                        </PlayerWrapper>
+                        <PlayerExerciseDetail>
+                            <H2>{ exersiceName }</H2>
+                            <P
                                 style={{
-                                    flex: 1,
-                                    alignItems: 'flex-end',
-                                    justifyContent: 'center',
-                                    marginRight: 52
+                                    textAlign: 'center',
+                                    marginHorizontal: 32
                                 }}
-                            >
-                                <TouchableOpacity>
-                                    <Icon name="banckward" size={32}  />
-                                </TouchableOpacity>
-                            </View>
-                            <View
-                                style={{
-                                    flex: 1,
-                                    alignItems: 'center'
-                                }}
-                            >
-                                <ExersicePlayButton onButtonPress={this.switchToParanyama.bind(this)} />
-
-                                <Text
-                                    style={{
-                                        color: colors.darkText,
-                                        marginTop: 16
-                                    }}
-                                >-0:4</Text>
-                            </View>
-                            <View
-                                style={{
-                                    flex: 1,
-                                    justifyContent: 'center',
-                                    marginLeft: 52,
-                                }}
-                            >
-                                <TouchableOpacity>
-                                    <Icon name="forward" size={32}  />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                    <View
-                        style={{
-                            flex: 1,
-                            justifyContent: 'flex-start',
-                            alignItems: 'center',
-                            marginTop: 32,
-                        }}
-                    >
-                        <Text
-                            style={{
-                                fontSize: 24,
-                                fontWeight: 'bold'
-                            }}
-                        >
-                            Balance Music Name
-                        </Text>
-                        <Text
-                            style={[colors.subText, {
-                                textAlign: 'center',
-                                marginHorizontal: 32
-                            }]}
-                        >
-                            This is exercise description about how to do this exercise. This is exercise description about how to do this exercise. This is exercise description about how to do this exercise. This is exercise description about how to do this exercise.
-                        </Text>
-                    </View>
+                            >{ description }</P>
+                        </PlayerExerciseDetail>
+                    </Container>)}
             </Container>
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return { exercise: state.exercise }
+}
+const mapDispatchToProps = (dispatch) => bindActionCreators(ExerciseCreators, dispatch)
+
+export default connect(mapStateToProps, mapDispatchToProps)(ExerciseScreen)

@@ -51,6 +51,8 @@
 		25905BD945344B52919E80B7 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1E72C50BDB8A48D888C41018 /* rubicon-icon-font.ttf */; };
 		A5CF2FFBF05048879273F674 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 162157E44A7E4F9D8D07FD6E /* SimpleLineIcons.ttf */; };
 		3EE98D785E334F3DB0E73BFD /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 67C5978803E1461BBB76759F /* Zocial.ttf */; };
+		39FE927E419541F8ADD53F91 /* meditation.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 519E26BB721E41378AB7F785 /* meditation.jpg */; };
+		A1CCCC810FCE40AABF18A71C /* Meditation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1556C164CCD24BD586BFC8F2 /* Meditation.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,6 +123,8 @@
 		1E72C50BDB8A48D888C41018 /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		162157E44A7E4F9D8D07FD6E /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/native-base/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		67C5978803E1461BBB76759F /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		519E26BB721E41378AB7F785 /* meditation.jpg */ = {isa = PBXFileReference; name = "meditation.jpg"; path = "../src/assets/fonts/meditation.jpg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		1556C164CCD24BD586BFC8F2 /* Meditation.ttf */ = {isa = PBXFileReference; name = "Meditation.ttf"; path = "../src/assets/fonts/Meditation.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -266,6 +270,8 @@
 				1E72C50BDB8A48D888C41018 /* rubicon-icon-font.ttf */,
 				162157E44A7E4F9D8D07FD6E /* SimpleLineIcons.ttf */,
 				67C5978803E1461BBB76759F /* Zocial.ttf */,
+				519E26BB721E41378AB7F785 /* meditation.jpg */,
+				1556C164CCD24BD586BFC8F2 /* Meditation.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -442,6 +448,8 @@
 				25905BD945344B52919E80B7 /* rubicon-icon-font.ttf in Resources */,
 				A5CF2FFBF05048879273F674 /* SimpleLineIcons.ttf in Resources */,
 				3EE98D785E334F3DB0E73BFD /* Zocial.ttf in Resources */,
+				39FE927E419541F8ADD53F91 /* meditation.jpg in Resources */,
+				A1CCCC810FCE40AABF18A71C /* Meditation.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

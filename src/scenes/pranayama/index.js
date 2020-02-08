@@ -33,9 +33,10 @@ const ParanyamaButton = (prop) => (<TouchableOpacity style={[{
                                         <View>
                                             <Text
                                                 style={{
-                                                    fontSize: 32,
+                                                    fontSize: 72,
+                                                    letterSpacing: 8,
                                                     textAlign: 'center',
-                                                    fontWeight: 'bold',
+                                                    fontFamily: 'Meditation',
                                                     color: colors.white
                                                 }}
                                             >{prop.title}</Text>

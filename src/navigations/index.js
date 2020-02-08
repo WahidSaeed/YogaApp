@@ -17,15 +17,14 @@ const RootNavigator = createAnimatedSwitchNavigator(
         Exercise: Exercise
     },
     {
-        initialRouteName: 'Home',
+        initialRouteName: 'Exercise',
         transition: (
             <Transition.Together>
               <Transition.Out
-                type="slide-left"
-                durationMs={400}
-                interpolation="linear"
+                type="fade"
+                interpolation="easeOut"
               />
-              <Transition.In type="slide-right" durationMs={500} />
+              <Transition.In type="fade" />
             </Transition.Together>
           ),
     }

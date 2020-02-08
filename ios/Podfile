@@ -36,6 +36,8 @@ target 'YogaApp' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'ReactNativeAudioToolkit', :path => '../node_modules/@react-native-community/audio-toolkit'
+
   target 'YogaAppTests' do
     inherit! :search_paths
     # Pods for testing

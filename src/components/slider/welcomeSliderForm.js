@@ -1,14 +1,35 @@
 import React, {Component} from "react";
-import { View, Button, ScrollView, FlatList, TouchableWithoutFeedback } from "react-native";
-import { Item, Input, Thumbnail, Text } from "native-base";
+import { View, TouchableOpacity } from "react-native";
+import { Item, Input, Text } from "native-base";
 import Icon from "react-native-vector-icons/AntDesign";
 import { SelectDefault } from "../common/inputs/Select";
+import { H2, P } from "../../components/common/inputs/heading";
+import { colors } from "../../styles/index";
+import Modal from "react-native-modal";
+import { metrics } from "../../styles/index";
 
 export class SliderFormMain extends Component {
-    
+    state = {
+        name: '',
+        age: 0,
+        gender: 0,
+        weight: 0,
+        height: 0,
+        modalVisible: false
+    };
+
     render(){
         return (
             <View>
+                <H2 
+                    style={{
+                        color: colors.white,
+                        textAlign: 'center', 
+                        marginVertical: 16
+                    }}
+                >
+                    Tell Us a Bit About YOU
+                </H2>
                 <Item
                     style={{
                         backgroundColor: '#fff',
@@ -37,7 +58,11 @@ export class SliderFormMain extends Component {
                         paddingHorizontal: 16
                     }}
                 >
-                    <Input placeholder="Gender" value="Male" disabled/>
+                    <Input placeholder="Gender" value="" onTouchStart={() => {
+                        this.setState({
+                            modalVisible: true
+                        })
+                    }} />
                     <Icon name="caretdown" />
                 </Item>
                 <Item
@@ -60,6 +85,65 @@ export class SliderFormMain extends Component {
                 >
                     <Input placeholder="Height"/>
                 </Item>
+                <P
+                    style={{
+                        color: colors.white,
+                        marginVertical: 8
+                    }}
+                >
+                    Why do we ask? Becoming pranic helps you find the best breathing 
+                    exercise. These information will help you enjoy the breathing exercise more.
+                </P>
+                <Modal isVisible={this.state.modalVisible} 
+                    onSwipeComplete={() => this.setState({
+                        modalVisible: false
+                    })}
+                    swipeDirection={['down']}
+                    style={{
+                        margin: 0,
+                        justifyContent: 'flex-end'
+                    }}
+                    >
+                        <View
+                            style={{
+                                minHeight: metrics.getHeightFromDP(30),
+                                maxHeight: metrics.getHeightFromDP(70),
+                                backgroundColor: colors.white,
+                                padding: 24,
+                                justifyContent: 'center',
+                                borderTopLeftRadius: 16,
+                                borderTopRightRadius: 16
+                            }}
+                        >
+                            <View
+                                style={{
+                                    height: 5,
+                                    width: 30,
+                                    backgroundColor: colors.gray,
+                                    borderRadius: 16,
+                                    alignSelf: 'center',
+                                    marginBottom: 18
+                                }}
+                            ></View>
+                            <SelectDefault
+                                isModal={true}
+                                data={[
+                                    {
+                                        Id: 0,
+                                        title: 'Men'
+                                    },
+                                    {
+                                        Id: 1,
+                                        title: 'Women'
+                                    },
+                                    {
+                                        Id: 2,
+                                        title: 'Others'
+                                    }
+                                ]}
+                            />
+                        </View>
+                </Modal>
             </View>
         );
     }
@@ -113,7 +197,18 @@ export class SliderFormBehaviour extends Component {
     
     render(){
         return(
+            <View>
+                <H2 
+                    style={{
+                        color: colors.white,
+                        textAlign: 'center', 
+                        marginVertical: 16
+                    }}
+                >
+                    How Would You Define Yourself
+                </H2>
                 <SelectDefault data={PersonalityDATA} />
+            </View>
         );
     }
 }
@@ -140,7 +235,19 @@ export class SliderFormToWorkOn extends Component {
             },
         ];
         return(
+            <View>
+                <H2 
+                    style={{
+                        color: colors.white,
+                        textAlign: 'center', 
+                        marginVertical: 16
+                    }}
+                >
+                    What Whould You life to Work on More
+                </H2>
                 <SelectDefault data={workOnData} />
+            </View>
+                
         );
     }
 }
@@ -150,30 +257,41 @@ export class SliderFormSubmit extends Component {
     
     render(){
         return(
-            <TouchableWithoutFeedback
-                onPress={() => {
-                    this.props.onclick()
-                }}
-            >
-                <View
+            <View>
+                <H2 
                     style={{
-                        flex: 1,
-                        justifyContent: 'center',
-                        backgroundColor: '#165BAA',
-                        padding: 16,
-                        alignItems: 'center',
-                        borderRadius: 32
+                        color: colors.white,
+                        textAlign: 'center', 
+                        marginVertical: 16
                     }}
                 >
-                    <Text
+                    Change your life
+                </H2>
+                <TouchableOpacity
+                    onPress={() => {
+                        this.props.onclick()
+                    }}
+                >
+                    <View
                         style={{
-                            color: '#fff'
+                            flex: 1,
+                            justifyContent: 'center',
+                            backgroundColor: '#165BAA',
+                            padding: 16,
+                            alignItems: 'center',
+                            borderRadius: 32
                         }}
                     >
-                        Continue
-                    </Text>
-                </View>
-            </TouchableWithoutFeedback>
+                        <Text
+                            style={{
+                                color: '#fff'
+                            }}
+                        >
+                            Continue
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
         );
     }
 }

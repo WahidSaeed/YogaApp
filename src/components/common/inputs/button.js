@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { TouchableOpacity, View } from "react-native";
-import Icon from "react-native-vector-icons/AntDesign";
+import Icon from "react-native-vector-icons/Entypo";
 import style, { colors } from "../../../styles";
 
 export class PlayButton extends Component {
@@ -14,11 +14,20 @@ export class PlayButton extends Component {
                 <View
                     style={style.Button.PlayButton}
                 >
-                    <Icon name="caretright" size={32} color={colors.white}
-                        style={{
-                            alignSelf: 'center',
-                        }}
-                    />
+                    {
+                        !this.props.isOnPlay && <Icon name="controller-play" size={32} color={colors.white}
+                                            style={{
+                                                alignSelf: 'center',
+                                            }}
+                                        />
+                    } 
+                    {
+                        this.props.isOnPlay && <Icon name="controller-stop" size={32} color={colors.white}
+                                                    style={{
+                                                        alignSelf: 'center',
+                                                    }}
+                                                />
+                    }
                 </View>
             </TouchableOpacity>
         );
