@@ -3,10 +3,10 @@ import { SignUp } from "../../utils/actions";
 const initalState = {
     payload: {
         name: '', 
-        age: 19, 
-        gender: 'M', 
-        weight: 70, 
-        height: 6, 
+        age: 0, 
+        gender: 0, 
+        weight: 0, 
+        height: 0, 
         personalityData: [], 
         exerciseData: []
     },

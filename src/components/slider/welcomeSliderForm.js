@@ -9,16 +9,32 @@ import Modal from "react-native-modal";
 import { metrics } from "../../styles/index";
 
 export class SliderFormMain extends Component {
-    state = {
-        name: '',
-        age: 0,
-        gender: 0,
-        weight: 0,
-        height: 0,
-        modalVisible: false
-    };
+    
+    onGenderSelect(gender) {
+        const { setGender, setModalVisible } = this.props;
+        setGender(gender.Id);
+        setModalVisible(false);
+    }
 
-    render(){
+    render() {
+
+        const genderOptions = [
+            {
+                Id: 0,
+                title: 'Men'
+            },
+            {
+                Id: 1,
+                title: 'Women'
+            },
+            {
+                Id: 2,
+                title: 'Others'
+            }
+        ];
+        const { name, age, gender, weight, height, modalVisible } = this.props
+        const { setName, setAge, setWeight, setHeight, setModalVisible } = this.props
+
         return (
             <View>
                 <H2 
@@ -38,7 +54,11 @@ export class SliderFormMain extends Component {
                         paddingHorizontal: 16
                     }}
                 >
-                    <Input placeholder="Name"/>
+                    <Input 
+                        placeholder="Name" 
+                        value={name} 
+                        ref={Input => this.nameInputRef = Input}
+                        onChangeText={value => { setName(value) }} />
                 </Item>
                 <Item
                     style={{
@@ -48,7 +68,12 @@ export class SliderFormMain extends Component {
                         paddingHorizontal: 16
                     }}
                 >
-                    <Input placeholder="Age"/>
+                    <Input 
+                        placeholder="Age" 
+                        value={age} 
+                        keyboardType='numeric'
+                        ref={Input => this.nameInputRef = Input}
+                        onChangeText={value => { setAge(value) }} />
                 </Item>
                 <Item 
                     style={{
@@ -58,11 +83,10 @@ export class SliderFormMain extends Component {
                         paddingHorizontal: 16
                     }}
                 >
-                    <Input placeholder="Gender" value="" onTouchStart={() => {
-                        this.setState({
-                            modalVisible: true
-                        })
-                    }} />
+                    <Input 
+                        placeholder="Gender" 
+                        value={genderOptions[gender].title}
+                        onTouchStart={() => setModalVisible(true)} />
                     <Icon name="caretdown" />
                 </Item>
                 <Item
@@ -73,7 +97,12 @@ export class SliderFormMain extends Component {
                         paddingHorizontal: 16
                     }}
                 >
-                    <Input placeholder="Weight"/>
+                    <Input 
+                        placeholder="Weight" 
+                        value={weight} 
+                        keyboardType='numeric'
+                        ref={Input => this.nameInputRef = Input}
+                        onChangeText={value => { setWeight(value) }} />
                 </Item>
                 <Item 
                     style={{
@@ -83,7 +112,12 @@ export class SliderFormMain extends Component {
                         paddingHorizontal: 16
                     }}
                 >
-                    <Input placeholder="Height"/>
+                    <Input 
+                        placeholder="Height" 
+                        value={height} 
+                        keyboardType='numeric'
+                        ref={Input => this.nameInputRef = Input}
+                        onChangeText={value => { setHeight(value) }} />
                 </Item>
                 <P
                     style={{
@@ -95,11 +129,9 @@ export class SliderFormMain extends Component {
                     Why do we ask? Becoming pranic helps you find the best breathing 
                     exercise. These information will help you enjoy the breathing exercise more.
                 </P>
-                <Modal isVisible={this.state.modalVisible} 
-                    onSwipeComplete={() => this.setState({
-                        modalVisible: false
-                    })}
+                <Modal isVisible={modalVisible} 
                     swipeDirection={['down']}
+                    onSwipeComplete={() => setModalVisible(false)}
                     style={{
                         margin: 0,
                         justifyContent: 'flex-end'
@@ -128,20 +160,8 @@ export class SliderFormMain extends Component {
                             ></View>
                             <SelectDefault
                                 isModal={true}
-                                data={[
-                                    {
-                                        Id: 0,
-                                        title: 'Men'
-                                    },
-                                    {
-                                        Id: 1,
-                                        title: 'Women'
-                                    },
-                                    {
-                                        Id: 2,
-                                        title: 'Others'
-                                    }
-                                ]}
+                                data={genderOptions}
+                                onItemSelect={ this.onGenderSelect.bind(this) }
                             />
                         </View>
                 </Modal>
@@ -151,7 +171,7 @@ export class SliderFormMain extends Component {
 }
 
 
-const PersonalityDATA = [
+const PersonalityDATAFixed = [
     {
         Id: 1,
         title: 'The Sage'
@@ -196,7 +216,13 @@ const PersonalityDATA = [
 
 export class SliderFormBehaviour extends Component {
     
-    render(){
+    onBehaviourSelect(Personality) {
+        const { setPersonalityData } = this.props;
+        setPersonalityData(Personality.Id);
+    }
+
+    render() {
+        const { personalityData } = this.props;
         return(
             <View>
                 <H2 
@@ -208,15 +234,24 @@ export class SliderFormBehaviour extends Component {
                 >
                     How Would You Define Yourself
                 </H2>
-                <SelectDefault data={PersonalityDATA} />
+                <SelectDefault 
+                    data={PersonalityDATAFixed}
+                    selectedData={personalityData}
+                    onItemSelect={ this.onBehaviourSelect.bind(this) } />
             </View>
         );
     }
 }
 
 export class SliderFormToWorkOn extends Component {
+
+    onExerciseSelect(Exercise) {
+        const { setExerciseData } = this.props;
+        setExerciseData(Exercise.Id);
+    }
         
     render(){
+        const { exerciseData } = this.props;
         const workOnData = [
             {
                 Id: 1,
@@ -246,7 +281,10 @@ export class SliderFormToWorkOn extends Component {
                 >
                     What Whould You life to Work on More
                 </H2>
-                <SelectDefault data={workOnData} />
+                <SelectDefault 
+                    data={workOnData}
+                    selectedData={exerciseData}
+                    onItemSelect={this.onExerciseSelect.bind(this)} />
             </View>
                 
         );

@@ -8,14 +8,27 @@ class SelectItem extends Component {
 
     state = {toggle: false};
 
+    componentDidMount() {
+        const { item, selectedData } = this.props;
+        const { Id, title } = item
+
+        if (selectedData.indexOf(Id) > -1) {
+            this.setState({
+                toggle: true
+            })
+        }
+    }
+
     render() {
-        const {item: {title}, isModal} = this.props;
+        const { item, isModal, isMultiSelect, selectedData, onItemSelect } = this.props;
+        const { Id, title } = item
         return (
             <TouchableOpacity
                 onPress={() => {
                     this.setState({
                         toggle: !this.state.toggle
-                    })
+                    });
+                    onItemSelect(item);
                 }}
             >
                 <SelectItemContainer isModal={isModal}>
@@ -36,13 +49,19 @@ class SelectItem extends Component {
 export class SelectDefault extends Component {
 
     render() {
-        const { data, isModal } = this.props;
+        const { data, isModal, isMultiSelect, selectedData, onItemSelect } = this.props;
+        const _selectedData = selectedData ? selectedData : []
         return (
             <SelectContainer isModal={isModal}>
                 <FlatList 
                     data={data}
                     renderItem={({item}) => {
-                        return <SelectItem item={item} {...this.props} />
+                        return <SelectItem 
+                                    item={item} 
+                                    isModal={isModal} 
+                                    isMultiSelect={isMultiSelect} 
+                                    selectedData={_selectedData}
+                                    onItemSelect={onItemSelect} />
                     }}
                     keyExtractor={item => item.Id.toString()}
                     showsVerticalScrollIndicator={false}

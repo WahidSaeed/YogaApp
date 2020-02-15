@@ -23,11 +23,11 @@ export default class ConnectBluetoothScreen extends Component {
         if (devices.find(x => x.name === deviceName) === undefined)
             this.setState({
                 devices: [...devices, device]
-            }, () => console.log('setstate'));
+            });
     }
     
     scanDevices() {
-        //this.manager.startDeviceScan(null, { allowDuplicates: false }, (error, device) => this.renderBluetoothDevices());
+        this.manager.startDeviceScan(null, { allowDuplicates: false }, (error, device) => this.renderBluetoothDevices(error, device));
     }
 
     stopScanDevies() {
@@ -46,12 +46,17 @@ export default class ConnectBluetoothScreen extends Component {
     }
 
     render() {
+        const { devices } = this.state;
+        console.log('ABC ABC ', devices);
         return(
             <Container>
                     <StatusBar
                       hidden={true}
                     />
-                    <FlatList data={this.state.devices} renderItem={(device) => (<View>{device.name}</View>)} />
+                    <FlatList data={devices} renderItem={({item}) => {
+                        console.log('render: ' + item);
+                        return <View><Text>{item.name}</Text></View>
+                    }} />
             </Container>
         );
     }
