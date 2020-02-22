@@ -10,6 +10,20 @@ export default class ConnectBluetoothScreen extends Component {
     state = {
         devices: []
     }
+    //'4fafc201-1fb5-459e-8fcc-c5c9c331914b'
+    //'beb5483e-36e1-4688-b7f5-ea07361b26a8'
+    onDeviceSelect(device) {
+        device.device.connect()
+        .then((device) => {
+            return device.discoverAllServicesAndCharacteristics()
+        })
+        .then((device) => {
+            device.writeCharacteristicWithResponseForService('4fafc201-1fb5-459e-8fcc-c5c9c331914b', 'beb5483e-36e1-4688-b7f5-ea07361b26a8', 'QUJDMTIzMTIz')
+        })
+        .catch((error) => {
+            // Handle errors
+        });
+    }
 
     renderBluetoothDevices(error, device) {
         const { devices } = this.state;
@@ -17,12 +31,15 @@ export default class ConnectBluetoothScreen extends Component {
             console.log(error);
             return
         }
-        console.log(devices.length);
-        const deviceName = device.name;
-        console.log(deviceName);
-        if (devices.find(x => x.name === deviceName) === undefined)
+        const title = device.name;
+        const Id = device.id;
+        if (devices.find(x => x.title === title) === undefined)
             this.setState({
-                devices: [...devices, device]
+                devices: [...devices, {
+                    Id,
+                    title,
+                    device
+                }]
             });
     }
     
@@ -31,7 +48,6 @@ export default class ConnectBluetoothScreen extends Component {
     }
 
     stopScanDevies() {
-        alert('stopped')
         this.manager.stopDeviceScan();
     }
 
@@ -39,7 +55,7 @@ export default class ConnectBluetoothScreen extends Component {
         const subscription = this.manager.onStateChange((state) => {
             if (state === 'PoweredOn') {
                 this.scanDevices();
-                setTimeout(this.stopScanDevies.bind(this), 300);
+                setTimeout(this.stopScanDevies.bind(this), 3000);
                 subscription.remove();
             }
         }, true);
@@ -47,16 +63,21 @@ export default class ConnectBluetoothScreen extends Component {
 
     render() {
         const { devices } = this.state;
-        console.log('ABC ABC ', devices);
         return(
             <Container>
                     <StatusBar
                       hidden={true}
                     />
-                    <FlatList data={devices} renderItem={({item}) => {
+                    {/* <FlatList data={devices} renderItem={({item}) => {
                         console.log('render: ' + item);
-                        return <View><Text>{item.name}</Text></View>
-                    }} />
+                        return <View><Text>{item.title}</Text></View>
+                    }} /> */}
+                    <SelectDefault 
+                        data={devices}
+                        isModal={true}
+                        isMultiSelect={false}
+                        onItemSelect={this.onDeviceSelect.bind(this)}
+                    />
             </Container>
         );
     }
