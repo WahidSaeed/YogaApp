@@ -10,6 +10,7 @@ import { Player as AudioPlayer } from "@react-native-community/audio-toolkit";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { ExerciseCreators } from "../../../statemanagement/creators/Exercise";
+import BleManagerInstance from "../../../utils/blueToothManager/BleManager";
 
 const HeadingWrapper = (prop) =>  <View style={{
                                         flex: 1,
@@ -73,6 +74,17 @@ class ExerciseScreen extends Component {
         Player: null
     }
 
+
+    manager = null;
+    bleManagerInstance = null;
+
+    constructor(props) {
+        super(props);
+        this.bleManagerInstance = BleManagerInstance.getInstance();
+        let device = this.bleManagerInstance.getDevice();
+        device.writeCharacteristicWithResponseForService('4fafc201-1fb5-459e-8fcc-c5c9c331914b', 'beb5483e-36e1-4688-b7f5-ea07361b26a8', 'QUJDMTIzMTIz');
+    }
+
     componentDidMount() {
         const { requestExerciseData } = this.props;
         requestExerciseData(3);
@@ -82,7 +94,6 @@ class ExerciseScreen extends Component {
         const prevCurrentExercise = prevState.CurrentExercise;
         const nextCurrentExercise = this.state.CurrentExercise;
         const { songURL } = this.props.exercise.payload[nextCurrentExercise];
-
         if(prevCurrentExercise !== nextCurrentExercise) {
             this.initPlayer(songURL);
             // this.preparePlayer();
@@ -166,6 +177,7 @@ class ExerciseScreen extends Component {
                 <StatusBar
                     hidden={true}
                 />
+                    {error && (<View><Text>Error</Text></View>)}
                     {isLoading && (<DefaultLoading />)}
                     {!isLoading && !error && (
                     <Container>

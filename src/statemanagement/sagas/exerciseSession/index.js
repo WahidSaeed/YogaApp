@@ -11,6 +11,7 @@ function* getExerciseData(action) {
         })
         yield put(Creators.requestExerciseDataSuccess(response.data))
     } catch (error) {
+        console.log(error);
         yield put(Creators.requestExerciseDataFail());
     }
 }

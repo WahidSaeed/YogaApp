@@ -1,28 +1,49 @@
 import React, { Component } from "react";
-import { View, Text, StatusBar, FlatList } from "react-native";
-import { colors } from "../../styles/index";
+import { StatusBar } from "react-native";
 import { Container } from "../../components/layout/index";
 import { BleManager } from "react-native-ble-plx";
 import { SelectDefault } from "../../components/common/inputs/Select";
+import BleManagerInstance from "../../utils/blueToothManager/BleManager";
 
 export default class ConnectBluetoothScreen extends Component {
-    manager = new BleManager();
+    manager = null;
+    bleManagerInstance = null;
+
     state = {
         devices: []
     }
-    //'4fafc201-1fb5-459e-8fcc-c5c9c331914b'
-    //'beb5483e-36e1-4688-b7f5-ea07361b26a8'
+
+    constructor(props) {
+        super(props);
+        this.bleManagerInstance = BleManagerInstance.getInstance();
+        this.manager = this.bleManagerInstance.getManager();
+    }
+
+    switchToHome() {
+        this.props.navigation.navigate('Home')
+    }
+
     onDeviceSelect(device) {
-        device.device.connect()
+        
+        this.bleManagerInstance.setDevice(device.device);
+        this.bleManagerInstance.getDevice().connect()
         .then((device) => {
-            return device.discoverAllServicesAndCharacteristics()
-        })
-        .then((device) => {
-            device.writeCharacteristicWithResponseForService('4fafc201-1fb5-459e-8fcc-c5c9c331914b', 'beb5483e-36e1-4688-b7f5-ea07361b26a8', 'QUJDMTIzMTIz')
+            
         })
         .catch((error) => {
-            // Handle errors
+            console.log(error)
         });
+        this.switchToHome();
+        // this.bleManagerInstance.getDevice().connect()
+        // .then((device) => {
+        //     return device.discoverAllServicesAndCharacteristics()
+        // })
+        // .then((device) => {
+        //     device.writeCharacteristicWithResponseForService('4fafc201-1fb5-459e-8fcc-c5c9c331914b', 'beb5483e-36e1-4688-b7f5-ea07361b26a8', 'QUJDMTIzMTIz');
+        // })
+        // .catch((error) => {
+        //     // Handle errors
+        // });
     }
 
     renderBluetoothDevices(error, device) {
@@ -68,10 +89,6 @@ export default class ConnectBluetoothScreen extends Component {
                     <StatusBar
                       hidden={true}
                     />
-                    {/* <FlatList data={devices} renderItem={({item}) => {
-                        console.log('render: ' + item);
-                        return <View><Text>{item.title}</Text></View>
-                    }} /> */}
                     <SelectDefault 
                         data={devices}
                         isModal={true}
