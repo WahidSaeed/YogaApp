@@ -5,7 +5,7 @@ import CourseScreen from "./course";
 import StateOfMindScreen from "./stateofmind";
 
 const ParanyamaNavigatorConfig = {
-    initialRouteName: 'Paranyama',
+    initialRouteName: 'StateOfMind',
     defaultNavigationOptions: {
       headerStyle: {
           backgroundColor: '#165BAA',

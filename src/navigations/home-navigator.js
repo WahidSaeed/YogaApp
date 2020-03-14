@@ -3,7 +3,7 @@ import ConnectBluetoothScreen  from "../scenes/home/index";
 import HomeScreen from "../scenes/home/testbreath";
 
 const HomeNavigatorConfig = {
-    initialRouteName: 'Connect',
+    initialRouteName: 'Home',
     header: null,
     headerMode: 'none'
 };

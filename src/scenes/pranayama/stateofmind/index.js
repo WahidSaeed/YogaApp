@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import { View, Text, StatusBar, FlatList, TouchableOpacity } from "react-native";
 import style from "../../../styles/index";
 import Icon from "react-native-vector-icons/AntDesign";
+import { Container } from "../../../components/layout/index";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { PranayamaCourseCreators } from "../../../statemanagement/creators/PranayamaCourse";
+import { DefaultLoading } from "../../../components/common/loader";
 
 const ListItem = ({item, navigation}) => {
     return (
@@ -32,48 +37,40 @@ const ListItem = ({item, navigation}) => {
     );
 }
 
-const DATA = [
-    {
-        id: 0,
-        value: 'Relax'
-    },
-    {
-        id: 1,
-        value: 'Get Firery'
-    },
-    {
-        id: 2,
-        value: 'Find Balance'
-    },
-    {
-        id: 3,
-        value: 'Build Resource'
-    }
-]
-
-export default class StateOfMindScreen extends Component {
+class StateOfMindScreen extends Component {
 
     static navigationOptions = {
         title: 'State of Mind',
       }
 
-    render() {
+    componentDidMount() {
+        const { requestExerciseData } = this.props;
+        requestExerciseData(1);
+    }
 
+    render() {
+        const { payload, isLoading, error } = this.props.pranayamaCourse;
+        console.log(this.props.pranayamaCourse)
         return(
-            <View style={style.Layout.safeArea}>
-                <View style={[style.Layout.container, {
-                    padding: 16
-                }]}>
-                    <FlatList 
-                            data={DATA}
+            <Container>
+                    {error && (<View><Text>Error</Text></View>)}
+                    {isLoading && (<DefaultLoading />)}
+                    {!isLoading && !error && (<FlatList 
+                            data={payload}
                             renderItem={({item}) => {
                                 return <ListItem item={item} {...this.props}/>
                             }}
                             keyExtractor={item => item.id.toString()}
                             scrollEnabled={true}
-                        />
-                </View>
-            </View>
+                        />)}
+            </Container>
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return { pranayamaCourse: state.pranayamaCourse }
+}
+const mapDispatchToProps = (dispatch) => bindActionCreators(PranayamaCourseCreators, dispatch)
+
+export default connect(mapStateToProps, mapDispatchToProps)(StateOfMindScreen)

@@ -17,7 +17,7 @@ const RootNavigator = createAnimatedSwitchNavigator(
         Exercise: Exercise
     },
     {
-        initialRouteName: 'Home',
+        initialRouteName: 'Paranyama',
         transition: (
             <Transition.Together>
               <Transition.Out
