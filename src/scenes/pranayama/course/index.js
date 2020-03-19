@@ -2,6 +2,12 @@ import React, { Component } from "react";
 import { View, Text, StatusBar, FlatList, TouchableOpacity } from "react-native";
 import style from "../../../styles/index";
 import Icon from "react-native-vector-icons/AntDesign";
+import { SelectDefault } from "../../../components/common/inputs/Select";
+import { Container } from "../../../components/layout/index";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { PranayamaCourseCreators } from "../../../statemanagement/creators/PranayamaCourse";
+import { DefaultLoading } from "../../../components/common/loader";
 
 const ListItem = ({item, navigation}) => {
     return (
@@ -63,29 +69,43 @@ const DATA = [
     },
 ]
 
-export default class CourseScreen extends Component {
+class CourseScreen extends Component {
 
     static navigationOptions = {
         title: 'Course Wanted',
     }
 
-    render() {
+    onPranayamaSelect(pranayama) {
+        console.log(pranayama);
+    }
+    
+    componentDidMount() {
+        const { requestExerciseData } = this.props;
+        requestExerciseData(2);
+    }
 
+    render() {
+        const { payload, isLoading, error } = this.props.pranayamaCourse;
         return(
-            <View style={style.Layout.safeArea}>
-                <View style={[style.Layout.container, {
-                    padding: 16
-                }]}>
-                    <FlatList 
-                            data={DATA}
-                            renderItem={({item}) => {
-                                return <ListItem item={item} {...this.props}/>
-                            }}
-                            keyExtractor={item => item.id.toString()}
-                            scrollEnabled={true}
+            <Container>
+                {error && (<View><Text>Error</Text></View>)}
+                {isLoading && (<DefaultLoading />)}
+                {!isLoading && !error && (
+                    <SelectDefault 
+                        data={payload}
+                        isModal={true}
+                        isMultiSelect={false}
+                        onItemSelect={this.onPranayamaSelect.bind(this)}
                     />
-                </View>
-            </View>
+                )}
+            </Container>
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return { pranayamaCourse: state.pranayamaCourse }
+}
+const mapDispatchToProps = (dispatch) => bindActionCreators(PranayamaCourseCreators, dispatch)
+
+export default connect(mapStateToProps, mapDispatchToProps)(CourseScreen)

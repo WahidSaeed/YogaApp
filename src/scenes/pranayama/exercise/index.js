@@ -74,27 +74,27 @@ class ExerciseScreen extends Component {
         Player: null
     }
 
-
-    manager = null;
     bleManagerInstance = null;
 
     constructor(props) {
         super(props);
         this.bleManagerInstance = BleManagerInstance.getInstance();
         let device = this.bleManagerInstance.getDevice();
-        device.writeCharacteristicWithResponseForService('4fafc201-1fb5-459e-8fcc-c5c9c331914b', 'beb5483e-36e1-4688-b7f5-ea07361b26a8', 'QUJDMTIzMTIz');
+        if(device)
+            device.writeCharacteristicWithResponseForService('4fafc201-1fb5-459e-8fcc-c5c9c331914b', 'beb5483e-36e1-4688-b7f5-ea07361b26a8', 'QUJDMTIzMTIz');
     }
 
     componentDidMount() {
-        const { requestExerciseData } = this.props;
-        requestExerciseData(3);
+        const { requestExerciseData, navigation } = this.props;
+        const { pranayama } = navigation.state.params;
+        requestExerciseData(pranayama.Id);
     }
 
     componentDidUpdate(prevProp, prevState) {
         const prevCurrentExercise = prevState.CurrentExercise;
         const nextCurrentExercise = this.state.CurrentExercise;
         const { songURL } = this.props.exercise.payload[nextCurrentExercise];
-        if(prevCurrentExercise !== nextCurrentExercise) {
+        if(nextCurrentExercise == 0 || (prevCurrentExercise !== nextCurrentExercise)) {
             this.initPlayer(songURL);
             // this.preparePlayer();
             // this.exerciseStopPlay();
@@ -127,29 +127,17 @@ class ExerciseScreen extends Component {
         })
     }
 
-        initPlayer(songURL) {
-        console.log('Name' + songURL);
+    initPlayer(songURL) {
         if(songURL) {
-            new AudioPlayer(songURL, { autoDestroy : false }).play();
-            // Player.prepare((err) => {
-            //         this.setState({
-            //             Duration: (Player.duration * 0.001 * 0.0166667).toFixed(2),
-            //             Perpare: Player.isPrepared,
-            //             Play: true
-            //         })
-            //     });
-            // this.setState({
-            //     Player,
-            //     Play: false,
-            //     Perpare: false,
-            //     Duration: 0
-            // })
-        }
-    }
-
-    preparePlayer(Player) {
-        if(Player) {
-            //Player
+            var PlayerAudio = new AudioPlayer(songURL, { autoDestroy : false })//.play();
+            .prepare((err) => {
+                    this.setState({
+                        Duration: (PlayerAudio.duration * 0.001 * 0.0166667).toFixed(2),
+                        Perpare: PlayerAudio.isPrepared,
+                        //Play: true,
+                        Player: PlayerAudio
+                    })
+                });
         }
     }
 
@@ -165,13 +153,15 @@ class ExerciseScreen extends Component {
             }
         }
     }
-
+//pranayama
     render() {
         const { CurrentExercise } = this.state;
         const { payload, isLoading, error } = this.props.exercise;
         const { exersiceName, songURL, description } = payload[CurrentExercise];
+        const { pranayama } = this.props.navigation.state.params;
+        //const { pranayama } = this.props.route;
         // this.initPlayer(songURL);
-        // this.exerciseStopPlay();
+        this.exerciseStopPlay();
         return(
             <Container>
                 <StatusBar
@@ -182,7 +172,7 @@ class ExerciseScreen extends Component {
                     {!isLoading && !error && (
                     <Container>
                         <HeadingWrapper>
-                            <H1 style={{ textAlign: "center" }}>Find Balance</H1>
+                            <H1 style={{ textAlign: "center" }}>{pranayama.title}</H1>
                         </HeadingWrapper>
                         <PlayerWrapper>
                             <PlayerInnerWrapper>
