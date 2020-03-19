@@ -128,7 +128,7 @@ class ExerciseScreen extends Component {
     }
 
     initPlayer(songURL) {
-        if(songURL) {
+        /*if(songURL) {
             var PlayerAudio = new AudioPlayer(songURL, { autoDestroy : false })//.play();
             .prepare((err) => {
                     this.setState({
@@ -138,7 +138,11 @@ class ExerciseScreen extends Component {
                         Player: PlayerAudio
                     })
                 });
-        }
+        }*/
+
+        new AudioPlayer('close_nostril.mp3')
+        .play();
+        
     }
 
     exerciseStopPlay() {
