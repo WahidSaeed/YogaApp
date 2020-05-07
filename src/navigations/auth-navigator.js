@@ -1,14 +1,15 @@
 import { createStackNavigator } from "react-navigation-stack";
-import WelcomeScreen from "../scenes/welcome";
+import { WelcomeScreen, SplashScreen } from "../scenes/welcome";
 
 const AuthNavigatorConfig = {
-    initialRouteName: 'Welcome',
+    initialRouteName: 'Splash',
     header: null,
     headerMode: 'none'
 };
 
 const RouteConfigs = {
-    Welcome: WelcomeScreen
+    Welcome: WelcomeScreen,
+    Splash: SplashScreen
 };
 
 const AuthNavigator = createStackNavigator(RouteConfigs, AuthNavigatorConfig);

@@ -20,7 +20,7 @@ export default class ConnectBluetoothScreen extends Component {
     }
 
     switchToHome() {
-        this.props.navigation.navigate('Home')
+        this.props.navigation.navigate('Paranyama')
     }
 
     onDeviceSelect(device) {

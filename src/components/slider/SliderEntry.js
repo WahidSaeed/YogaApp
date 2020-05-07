@@ -8,6 +8,7 @@ import { withNavigation } from "react-navigation";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { SignUpCreators } from "../../statemanagement/creators/SignUp";
+import AsyncStorage from '@react-native-community/async-storage';
 
 class SliderEntry extends Component {
 
@@ -32,50 +33,6 @@ class SliderEntry extends Component {
         exerciseData: []
     };
 
-    setName = (name) => this.setState({ name })
-
-    setAge = (age) => this.setState({ age })
-
-    setGender = (gender) => this.setState({ gender })
-
-    setWeight = (weight) => this.setState({ weight })
-
-    setHeight = (height) => this.setState({ height })
-
-    setModalVisible = (modalVisible) => this.setState({ modalVisible })
-
-    setPersonalityData = (personality) => {
-        let { personalityData } = this.state;
-        const dataExistingPostion = personalityData.indexOf(personality);
-        let updatedPersonalityData = [];
-        if (dataExistingPostion > -1) {
-            personalityData.splice(dataExistingPostion, dataExistingPostion);
-            updatedPersonalityData = personalityData;
-        }
-        else {
-            updatedPersonalityData = [...personalityData, personality];  
-        }
-        console.log(updatedPersonalityData);
-        this.setState({ exerciseData: updatedPersonalityData });
-    }
-
-    setExerciseData = (exercise) => {
-        let { exerciseData } = this.state;
-        const dataExistingPostion = exerciseData.indexOf(exercise);
-        let updatedExerciseData = [];
-        if (dataExistingPostion > -1) {
-            exerciseData.splice(dataExistingPostion, dataExistingPostion);
-            updatedExerciseData = exerciseData;
-        }
-        else {
-            updatedExerciseData = [...exerciseData, exercise];  
-        }
-        console.log(updatedExerciseData);
-        this.setState({ exerciseData: updatedExerciseData });
-    }
-
-    
-
     get image () {
         const { data: { illustration }, parallax, parallaxProps, even } = this.props;
 
@@ -96,46 +53,54 @@ class SliderEntry extends Component {
             />
         );
     }
+    
+    async componentDidUpdate(prevProp, prevState) {
 
-    switchToHomeScreen(){
-        this.props.navigation.navigate('Home');
+        if(prevProp.signUp.payload !== this.props.signUp.payload) {
+            const { payload, isLoading, error } = this.props.signUp;
+            if(payload && !isLoading && !error)
+            {
+                console.log('User Data: ', JSON.stringify(payload));
+                await AsyncStorage.setItem('@UserData', JSON.stringify(payload), ()=> {
+                    this.props.navigation.navigate('Home');
+                });
+            } 
+        }
     }
 
-    render () {
-        const { even, screenNumber, data: { overlayColor } } = this.props;
-        const { signUp: { payload: { name, age, gender, weight, height, modalVisible, personalityData, exerciseData } } } = this.props;
+    switchToHomeScreen() {
+        const { setSignUpData } = this.props;
+        setSignUpData({
+            name: 'Test User',
+            age: 20,
+            gender: 1,
+            weight: 43,
+            height: 5,
+            personalityData: [1, 2],
+            exerciseData: [1, 2],
+            notificationId: 1,
+            subscriptionId: 1
+        });
+        //this.props.navigation.navigate('Home');
+    }
+
+    render() {
+        const { even, screenNumber, switchToNextScreen, data: { overlayColor } } = this.props;
+        const { signUp: { isLoading, error, payload: { name, age, gender, weight, height, modalVisible, personalityData, exerciseData } } } = this.props;
         
         const FormViews = () => {
             if (screenNumber === 0) {
 
-                return <SliderFormMain 
-                            name={name} 
-                            age={age} 
-                            gender={gender} 
-                            weight={weight} 
-                            height={height} 
-                            modalVisible={modalVisible}  
-                            setName={this.setName.bind(this)}
-                            setAge={this.setAge.bind(this)}
-                            setGender={this.setGender.bind(this)}
-                            setWeight={this.setWeight.bind(this)}
-                            setHeight={this.setHeight.bind(this)}
-                            setModalVisible={this.setModalVisible.bind(this)} />
+                return <SliderFormMain switchToNextScreen={switchToNextScreen} />
 
             } else if (screenNumber === 1) {
-                return <SliderFormBehaviour 
-                            personalityData={personalityData}
-                            setPersonalityData={this.setPersonalityData}
-                        />
+                return <SliderFormBehaviour />
             }
             else if (screenNumber === 2) {
-                return <SliderFormToWorkOn 
-                            exerciseData={exerciseData}
-                            setExerciseData={this.setExerciseData.bind(this)}
-                        />
+                return <SliderFormToWorkOn />
             }
             else if (screenNumber === 3) {
-                return <SliderFormSubmit onclick={() => this.switchToHomeScreen() } />
+                return <SliderFormSubmit onclick={() => this.switchToHomeScreen() } isLoading={isLoading} />
             }
         }
 
@@ -156,6 +121,7 @@ class SliderEntry extends Component {
 }
 
 const mapStateToProps = (state) => {
+
     return { signUp: state.signUp }
 }
 const mapDispatchToProps = (dispatch) => bindActionCreators(SignUpCreators, dispatch)

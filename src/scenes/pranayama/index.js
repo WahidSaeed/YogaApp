@@ -33,7 +33,7 @@ const ParanyamaButton = (prop) => (<TouchableOpacity style={[{
                                         <View>
                                             <Text
                                                 style={{
-                                                    fontSize: 72,
+                                                    fontSize: 46,
                                                     letterSpacing: 8,
                                                     textAlign: 'center',
                                                     fontFamily: 'Meditation',
@@ -64,7 +64,7 @@ export class ParanyamaScreen extends Component {
             <Container>
                 <ParanyamaWrapper>
                     <ParanyamaButton
-                        title="State of Mind Wanted"
+                        title="State of Mind & Emotions"
                         ImageSource={require("../../statics/images/Wallpaper_5_Half.jpg")}
                         switchTo={this.switchToStateOfMind.bind(this)}
                         style={{

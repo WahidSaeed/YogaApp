@@ -11,10 +11,9 @@ export class ParameterScreen extends Component {
           </Separator>
           <ListItem 
             icon
-            onPress={() => {
-              this.props.navigation.navigate('Profile')
-            }}
-          
+            // onPress={() => {
+            //   this.props.navigation.navigate('Profile')
+            // }}
           >
             <Left>
               <Button style={{ backgroundColor: "#FF9501" }}>
@@ -25,7 +24,7 @@ export class ParameterScreen extends Component {
               <Text>Profile</Text>
             </Body>
             <Right>
-              <Text>Shabbar</Text>
+              <Text>User</Text>
               <Icon active name="arrow-forward" />
             </Right>
           </ListItem>

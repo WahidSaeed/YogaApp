@@ -1,12 +1,13 @@
 import React, { Component } from "react";
-import { View, Text, StatusBar, FlatList, TouchableOpacity, Button } from "react-native";
+import { View, Text, StatusBar, FlatList, TouchableOpacity, Button, Alert } from "react-native";
 import style, {colors} from "../../../styles/index";
 import { ExersicePlayButton } from "../../../components/common/inputs/button";
 import { Container } from "../../../components/layout/index";
 import { H1, H2, P } from "../../../components/common/inputs/heading";
 import { DefaultLoading } from "../../../components/common/loader";
 import Icon from "react-native-vector-icons/AntDesign";
-import { Player as AudioPlayer } from "@react-native-community/audio-toolkit";
+//import { Player as AudioPlayer } from "@react-native-community/audio-toolkit";
+import Sound from "react-native-sound";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { ExerciseCreators } from "../../../statemanagement/creators/Exercise";
@@ -66,12 +67,13 @@ class ExerciseScreen extends Component {
         title: 'Exercise',
       }
     
+    Player = null 
     state = {
+        PlayerLoading: false,
         Play: false,
         Perpare: false,
         Duration: 0,
-        CurrentExercise: 0,
-        Player: null
+        CurrentExerciseIndex: 0
     }
 
     bleManagerInstance = null;
@@ -90,82 +92,195 @@ class ExerciseScreen extends Component {
         requestExerciseData(pranayama.Id);
     }
 
-    componentDidUpdate(prevProp, prevState) {
-        const prevCurrentExercise = prevState.CurrentExercise;
-        const nextCurrentExercise = this.state.CurrentExercise;
-        const { songURL } = this.props.exercise.payload[nextCurrentExercise];
-        if(nextCurrentExercise == 0 || (prevCurrentExercise !== nextCurrentExercise)) {
-            this.initPlayer(songURL);
-            // this.preparePlayer();
-            // this.exerciseStopPlay();
-        }
-    }
+    // componentDidUpdate(prevProp, prevState) {
+    //     const prevCurrentExercise = prevState.CurrentExerciseIndex;
+    //     const nextCurrentExercise = this.state.CurrentExerciseIndex;
+    //     if(nextCurrentExercise == 0 || (prevCurrentExercise !== nextCurrentExercise)) {
+    //         this.initPlayer();
+    //     }
+    // }
 
     nextExercise() {
         const { payload } = this.props.exercise;
-        const { CurrentExercise } = this.state;
-
-        if (payload[CurrentExercise + 1])
+        const { CurrentExerciseIndex } = this.state;
+        const NextExerciseIndex = CurrentExerciseIndex + 1;
+        
+        //this.initPlayer(NextExerciseIndex);
+        if (payload[CurrentExerciseIndex + 1])
             this.setState({
-                CurrentExercise: CurrentExercise + 1
-            })
+                CurrentExerciseIndex: NextExerciseIndex
+            }, this.togglePlayer());
     }
 
     prevExercise() {
         const { payload } = this.props.exercise;
-        const { CurrentExercise } = this.state;
-        
-        if (payload[CurrentExercise - 1])
+        const { CurrentExerciseIndex } = this.state;
+        const PrevExerciseIndex = CurrentExerciseIndex - 1;
+        //this.initPlayer(PrevExerciseIndex);
+        if (payload[CurrentExerciseIndex - 1])
             this.setState({
-                CurrentExercise: CurrentExercise - 1
-            })
+                CurrentExerciseIndex: PrevExerciseIndex
+            }, this.togglePlayer());
     }
 
-    switchToParanyama() {
-        this.setState({
-            Play: !this.state.Play
-        })
-    }
+    togglePlayer() {
+        const { Play, CurrentExerciseIndex } = this.state;
+        const payload = this.props.exercise.payload[CurrentExerciseIndex];
+        console.log(payload);
+        let switchPlay = !Play;
 
-    initPlayer(songURL) {
-        /*if(songURL) {
-            var PlayerAudio = new AudioPlayer(songURL, { autoDestroy : false })//.play();
-            .prepare((err) => {
-                    this.setState({
-                        Duration: (PlayerAudio.duration * 0.001 * 0.0166667).toFixed(2),
-                        Perpare: PlayerAudio.isPrepared,
-                        //Play: true,
-                        Player: PlayerAudio
-                    })
+        if(switchPlay) {
+            this.destroyPlayer();
+
+            let PlayerAudio = new Sound(payload.songURL, Sound.MAIN_BUNDLE, (error) => {
+                if(error) {
+                    alert('Something went wrong. Please reset app and try again.');
+                    return;
+                }
+                this.setState({
+                    Duration: (PlayerAudio.getDuration()),
+                    Perpare: true,
+                    PlayerLoading: false
                 });
-        }*/
+                PlayerAudio.play();
+                this.Player = PlayerAudio;
+                this.initTimeout();
+            });
 
-        new AudioPlayer('close_nostril.mp3')
-        .play();
-        
+            // var PlayerAudio = new AudioPlayer(payload.songURL, { autoDestroy : false })
+            // .prepare((err) => {
+            //         this.setState({
+            //             Duration: (PlayerAudio.duration * 0.001 * 0.0166667).toFixed(2),
+            //             Perpare: PlayerAudio.isPrepared,
+            //             PlayerLoading: false
+            //         });
+            //         PlayerAudio.play();
+            //         this.Player = PlayerAudio;
+            //         this.initTimeout()            
+            //     });
+        }
+        else {
+            this.destroyPlayer();
+        }
+
+        this.setState({
+            Play: switchPlay,
+            PlayerLoading: switchPlay
+        });
     }
 
-    exerciseStopPlay() {
-        const { Player, Perpare, Play } = this.state;
 
-        if (Perpare) {
-            if (Play) {
-                Player.play();
-            }
-            else {
-                Player.stop();
-            }
+    initTimeout(index = 0) {
+        const { CurrentExerciseIndex } = this.state;
+        const { DeviceInstructions } = this.props.exercise.payload[CurrentExerciseIndex];
+        if(DeviceInstructions.length > index) {
+            const { nostrilSide, seconds} = DeviceInstructions[index];
+            const timer = setTimeout(() => {
+                console.log(this.Player.currentTime)
+                console.log('Interval ' + nostrilSide + ' ' + seconds);
+                let voiceClip = '';
+                switch (nostrilSide) {
+                    case 1:
+                        voiceClip = 'eb.mp3'; //exhale breath
+                        break;
+                    case 2:
+                        voiceClip = 'el.mp3'; //exhale left
+                        break;
+                    case 3:     
+                        voiceClip = 'er.mp3'; //exhale right
+                        break;
+                    case 4:     
+                        voiceClip = 'hb.mp3'; //hold breath
+                        break;
+                    case 5:     
+                        voiceClip = 'ib.mp3'; //inhale breath
+                        break;
+                    case 6:     
+                        voiceClip = 'il.mp3'; //inhale left
+                        break;
+                    case 7:     
+                        voiceClip = 'ir.mp3'; //inhale right
+                        break;
+                    case 8:     
+                        voiceClip = 'next.mp3'; //next exercise
+                        break;
+                    case 9:     
+                        voiceClip = 'end.mp3'; //end exercise
+                        break;
+                }
+                let PlayerAudioL = new Sound(voiceClip, Sound.MAIN_BUNDLE, (error) => {
+                    if(error) {
+                        alert('Something went wrong. Please reset app and try again.');
+                        return;
+                    }
+                    PlayerAudioL.play();
+                    this.initTimeout(index + 1);
+                });
+            }, seconds * 1000);
+            this.Timer = timer;
+        }
+        else {
+            this.nextExercise()
         }
     }
+
+    destroyPlayer() {
+        if(this.Player) {
+            this.Player.stop();
+            this.Player.release();
+            this.Player = null;
+            if(this.Timer)
+                clearTimeout(this.Timer);
+        }
+    }
+
+    endSession() {
+        this.destroyPlayer();
+        this.props.navigation.navigate('Paranyama')
+    }
+
+    backToList() {
+        Alert.alert(
+            'End Session',
+            'Are you sure you want to end this session?',
+            [
+              {
+                text: 'No',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              { text: 'Yes', onPress: () => this.endSession() },
+            ],
+            {cancelable: false},
+          );
+    }
+
+    // initPlayer(index = 0) {
+    //     const payload = this.props.exercise.payload[index];
+    //     console.log(payload);
+    //     if(payload.songURL) {
+    //         this.destroyPlayer();
+    //         var PlayerAudio = new AudioPlayer('test_pranayama.mp3', { autoDestroy : false })
+    //         .prepare((err) => {
+    //                 this.setState({
+    //                     Duration: (PlayerAudio.duration * 0.001 * 0.0166667).toFixed(2),
+    //                     Perpare: PlayerAudio.isPrepared
+    //                 });
+    //                 this.Player = PlayerAudio;
+    //                 this.initTimeout()            
+    //             });
+    //     }
+        
+    //     /*new AudioPlayer('close_nostril.mp3')
+    //     .play();*/
+    // }
+
 //pranayama
     render() {
-        const { CurrentExercise } = this.state;
+        const { CurrentExerciseIndex } = this.state;
         const { payload, isLoading, error } = this.props.exercise;
-        const { exersiceName, songURL, description } = payload[CurrentExercise];
+        const { exersiceName, songURL, description } = payload[CurrentExerciseIndex];
         const { pranayama } = this.props.navigation.state.params;
-        //const { pranayama } = this.props.route;
-        // this.initPlayer(songURL);
-        this.exerciseStopPlay();
         return(
             <Container>
                 <StatusBar
@@ -176,15 +291,15 @@ class ExerciseScreen extends Component {
                     {!isLoading && !error && (
                     <Container>
                         <HeadingWrapper>
-                            <H1 style={{ textAlign: "center" }}>{pranayama.title}</H1>
+                            <H1 style={{ textAlign: "center" }}>{ exersiceName }</H1>
                         </HeadingWrapper>
                         <PlayerWrapper>
                             <PlayerInnerWrapper>
                                 <PlayerInnerWrapperLeft>
-                                    <PlayerAsideButton onPress={this.prevExercise.bind(this)} name="banckward" />
+                                    {/* <PlayerAsideButton onPress={this.prevExercise.bind(this)} name="banckward" /> */}
                                 </PlayerInnerWrapperLeft>
                                 <PlayerInnerWrapperCenter>
-                                    <ExersicePlayButton isOnPlay={this.state.Play} onButtonPress={this.switchToParanyama.bind(this)} />
+                                    <ExersicePlayButton isOnPlay={this.state.Play} isLoading={this.state.PlayerLoading}  onButtonPress={this.togglePlayer.bind(this)} />
                                     <Text
                                         style={{
                                             color: colors.darkText,
@@ -193,12 +308,12 @@ class ExerciseScreen extends Component {
                                     >{this.state.Duration}</Text>
                                 </PlayerInnerWrapperCenter>
                                 <PlayerInnerWrapperRight>
-                                    <PlayerAsideButton onPress={this.nextExercise.bind(this)} name="forward" />
+                                    {/* <PlayerAsideButton onPress={this.nextExercise.bind(this)} name="forward" /> */}
                                 </PlayerInnerWrapperRight>
                             </PlayerInnerWrapper>
                         </PlayerWrapper>
                         <PlayerExerciseDetail>
-                            <H2>{ exersiceName }</H2>
+                            <H2>{ pranayama.title }</H2>
                             <P
                                 style={{
                                     textAlign: 'center',
@@ -206,6 +321,17 @@ class ExerciseScreen extends Component {
                                 }}
                             >{ description }</P>
                         </PlayerExerciseDetail>
+                        
+                        <TouchableOpacity onPress={() => this.backToList()} style={{
+                            height: 100,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: '#979797'
+                        }}>
+                            <Text>
+                                End Session
+                            </Text>
+                        </TouchableOpacity>
                     </Container>)}
             </Container>
         );

@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import { View, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity, ActivityIndicator } from "react-native";
 import { Item, Input, Text } from "native-base";
 import Icon from "react-native-vector-icons/AntDesign";
 import { SelectDefault } from "../common/inputs/Select";
@@ -9,11 +9,31 @@ import Modal from "react-native-modal";
 import { metrics } from "../../styles/index";
 
 export class SliderFormMain extends Component {
+
+    state = {
+        name: '', 
+        age: 0, 
+        gender: 0, 
+        weight: 0, 
+        height: 0, 
+        modalVisible: false
+    }
+
+    setName = (name) => this.setState({ name })
+
+    setAge = (age) => this.setState({ age })
+
+    setGender = (gender) => this.setState({ gender })
+
+    setWeight = (weight) => this.setState({ weight })
+
+    setHeight = (height) => this.setState({ height })
+
+    setModalVisible = (modalVisible) => this.setState({ modalVisible })
     
     onGenderSelect(gender) {
-        const { setGender, setModalVisible } = this.props;
-        setGender(gender.Id);
-        setModalVisible(false);
+        this.setGender(gender.Id);
+        this.setModalVisible(false);
     }
 
     render() {
@@ -32,9 +52,8 @@ export class SliderFormMain extends Component {
                 title: 'Others'
             }
         ];
-        const { name, age, gender, weight, height, modalVisible } = this.props
-        const { setName, setAge, setWeight, setHeight, setModalVisible } = this.props
-
+        const { name, age, gender, weight, height, modalVisible } = this.state
+        
         return (
             <View>
                 <H2 
@@ -57,8 +76,7 @@ export class SliderFormMain extends Component {
                     <Input 
                         placeholder="Name" 
                         value={name} 
-                        ref={Input => this.nameInputRef = Input}
-                        onChangeText={value => { setName(value) }} />
+                        onChangeText={value => { this.setName(value) }} />
                 </Item>
                 <Item
                     style={{
@@ -72,8 +90,7 @@ export class SliderFormMain extends Component {
                         placeholder="Age" 
                         value={age} 
                         keyboardType='numeric'
-                        ref={Input => this.nameInputRef = Input}
-                        onChangeText={value => { setAge(value) }} />
+                        onChangeText={value => { this.setAge(value) }} />
                 </Item>
                 <Item 
                     style={{
@@ -86,7 +103,7 @@ export class SliderFormMain extends Component {
                     <Input 
                         placeholder="Gender" 
                         value={genderOptions[gender].title}
-                        onTouchStart={() => setModalVisible(true)} />
+                        onTouchStart={() => this.setModalVisible(true)} />
                     <Icon name="caretdown" />
                 </Item>
                 <Item
@@ -101,8 +118,7 @@ export class SliderFormMain extends Component {
                         placeholder="Weight" 
                         value={weight} 
                         keyboardType='numeric'
-                        ref={Input => this.nameInputRef = Input}
-                        onChangeText={value => { setWeight(value) }} />
+                        onChangeText={value => { this.setWeight(value) }} />
                 </Item>
                 <Item 
                     style={{
@@ -116,8 +132,7 @@ export class SliderFormMain extends Component {
                         placeholder="Height" 
                         value={height} 
                         keyboardType='numeric'
-                        ref={Input => this.nameInputRef = Input}
-                        onChangeText={value => { setHeight(value) }} />
+                        onChangeText={value => { this.setHeight(value) }} />
                 </Item>
                 <P
                     style={{
@@ -129,9 +144,36 @@ export class SliderFormMain extends Component {
                     Why do we ask? Becoming pranic helps you find the best breathing 
                     exercise. These information will help you enjoy the breathing exercise more.
                 </P>
+
+                <TouchableOpacity
+                    onPress={() => {
+                        console.log(this.props.switchToNextScreen)
+                        this.props.switchToNextScreen(1)
+                    }}
+                >
+                    <View
+                        style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            backgroundColor: '#165BAA',
+                            padding: 16,
+                            alignItems: 'center',
+                            borderRadius: 32
+                        }}
+                    >
+                        <Text
+                            style={{
+                                color: '#fff'
+                            }}
+                        >
+                            Next
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+
                 <Modal isVisible={modalVisible} 
                     swipeDirection={['down']}
-                    onSwipeComplete={() => setModalVisible(false)}
+                    onSwipeComplete={() => this.setModalVisible(false)}
                     style={{
                         margin: 0,
                         justifyContent: 'flex-end'
@@ -215,14 +257,32 @@ const PersonalityDATAFixed = [
 ];
 
 export class SliderFormBehaviour extends Component {
-    
+
+    state = {
+        personalityData: []
+    }
+
     onBehaviourSelect(Personality) {
-        const { setPersonalityData } = this.props;
-        setPersonalityData(Personality.Id);
+        this.setPersonalityData(Personality.Id);
+    }
+
+    setPersonalityData = (personality) => {
+        let { personalityData } = this.state;
+        const dataExistingPostion = personalityData.indexOf(personality);
+        let updatedPersonalityData = [];
+        if (dataExistingPostion > -1) {
+            personalityData.splice(dataExistingPostion, dataExistingPostion);
+            updatedPersonalityData = personalityData;
+        }
+        else {
+            updatedPersonalityData = [...personalityData, personality];  
+        }
+        console.log(updatedPersonalityData);
+        this.setState({ personalityData: updatedPersonalityData });
     }
 
     render() {
-        const { personalityData } = this.props;
+        const { personalityData } = this.state;
         return(
             <View>
                 <H2 
@@ -245,13 +305,31 @@ export class SliderFormBehaviour extends Component {
 
 export class SliderFormToWorkOn extends Component {
 
+    state = {
+        exerciseData: []
+    }
+
     onExerciseSelect(Exercise) {
-        const { setExerciseData } = this.props;
-        setExerciseData(Exercise.Id);
+        this.setExerciseData(Exercise.Id);
+    }
+
+    setExerciseData = (exercise) => {
+        let { exerciseData } = this.state;
+        const dataExistingPostion = exerciseData.indexOf(exercise);
+        let updatedExerciseData = [];
+        if (dataExistingPostion > -1) {
+            exerciseData.splice(dataExistingPostion, dataExistingPostion);
+            updatedExerciseData = exerciseData;
+        }
+        else {
+            updatedExerciseData = [...exerciseData, exercise];  
+        }
+        console.log(updatedExerciseData);
+        this.setState({ exerciseData: updatedExerciseData });
     }
         
     render(){
-        const { exerciseData } = this.props;
+        const { exerciseData } = this.state;
         const workOnData = [
             {
                 Id: 1,
@@ -293,7 +371,6 @@ export class SliderFormToWorkOn extends Component {
 
 
 export class SliderFormSubmit extends Component {
-    
     render(){
         return(
             <View>
@@ -321,13 +398,19 @@ export class SliderFormSubmit extends Component {
                             borderRadius: 32
                         }}
                     >
-                        <Text
+                        {!this.props.isLoading && (<Text
                             style={{
                                 color: '#fff'
                             }}
                         >
                             Continue
-                        </Text>
+                        </Text>)}
+
+                        {this.props.isLoading && (<ActivityIndicator
+                                size={Platform.OS === 'ios' ? 'small' : 'large'}
+                                color={colors.white}
+                            />)}
+
                     </View>
                 </TouchableOpacity>
             </View>

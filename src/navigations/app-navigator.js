@@ -23,7 +23,7 @@ const AuthNavigatorConfig = {
 
 const RouteConfigs = {
     Paranyama: ParanyamaScreen,
-    History: HistoryScreen,
+    // History: HistoryScreen,
     Parameter: ParameterScreen
 };
 

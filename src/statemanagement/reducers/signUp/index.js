@@ -8,9 +8,11 @@ const initalState = {
         weight: 0, 
         height: 0, 
         personalityData: [], 
-        exerciseData: []
+        exerciseData: [],
+        notificationId: 1,
+        subscriptionId: 1
     },
-    isLoading: true,
+    isLoading: false,
     error: false
 }
 
