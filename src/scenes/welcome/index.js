@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
-import { Platform, View, ScrollView, Text, StatusBar, SafeAreaView } from 'react-native';
+import { Platform, View, StatusBar, TouchableOpacity, Text, ActivityIndicator, Image } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { sliderWidth, itemWidth } from '../../styles/SliderEntry.style';
-import SliderEntry from '../../components/SliderEntry';
-import styles, { colors } from '../../styles/index.style';
+import SliderEntry from '../../components/slider/SliderEntry';
+import { Container, ContainerWithPadding } from "../../components/layout/index";
+import { H1 } from "../../components/common/inputs/heading";
+import style , { colors } from '../../styles/index';
 import { ENTRIES1 } from '../../statics/entries';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const IS_ANDROID = Platform.OS === 'android';
 const SLIDER_1_FIRST_ITEM = 0;
 
-export default class WelcomeScreen extends Component {
+export class WelcomeScreen extends Component {
 
     constructor (props) {
         super(props);
@@ -19,7 +22,7 @@ export default class WelcomeScreen extends Component {
         };
     }
 
-    _renderItemWithParallax ({item, index}, parallaxProps) {
+    _renderItemWithParallax ({item, index}, parallaxProps, switchToNextScreen) {
         return (
             <SliderEntry
               data={item}
@@ -27,18 +30,16 @@ export default class WelcomeScreen extends Component {
               parallax={true}
               screenNumber={index}
               parallaxProps={parallaxProps}
+              switchToNextScreen={switchToNextScreen}
             />
         );
     }
 
-    mainExample () {
+    main () {
         const { slider1ActiveSlide } = this.state;
 
         return (
             <View>
-                <StatusBar
-                    hidden={true}
-                />
                 <Carousel
                   ref={c => this._slider1Ref = c}
                   data={ENTRIES1}
@@ -50,19 +51,21 @@ export default class WelcomeScreen extends Component {
                   inactiveSlideScale={1}
                   inactiveSlideOpacity={1}
                   inactiveSlideShift={0}
-                  containerCustomStyle={styles.slider}
-                  contentContainerCustomStyle={styles.sliderContentContainer}
+                //   scrollEnabled={false}
+                  containerCustomStyle={style.Slider.slider}
                   autoplay={false}
-                  onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
+                  onSnapToItem={(index) =>  console.log('onSnapToItem', index) }
+                  switchToNextScreen={this.switchToNextScreen.bind(this)}
                 />
+                {/* this.setState({ slider1ActiveSlide: index }) */}
                 <View>
                     <Pagination
                         dotsLength={ENTRIES1.length}
                         activeDotIndex={slider1ActiveSlide}
-                        containerStyle={styles.paginationContainer}
+                        //containerStyle={styles.paginationContainer}
                         dotColor={'rgba(255, 255, 255, 0.92)'}
-                        dotStyle={styles.paginationDot}
-                        inactiveDotColor={colors.black}
+                        dotStyle={style.Pagination.paginationDot}
+                        inactiveDotColor={colors.dark}
                         inactiveDotOpacity={0.4}
                         inactiveDotScale={0.6}
                         carouselRef={this._slider1Ref}
@@ -73,31 +76,96 @@ export default class WelcomeScreen extends Component {
         );
     }
     
+    switchToNextScreen(index) {
+        console.log('click')
+        this._slider1Ref._snapToItem(index);
+    }
+
     get gradient () {
         return (
             <LinearGradient
-              colors={[colors.background1, colors.background2]}
+              colors={[colors.primaryColor, colors.secondaryColor]}
               startPoint={{ x: 1, y: 0 }}
               endPoint={{ x: 0, y: 1 }}
-              style={styles.gradient}
+              style={style.Gradient.gradient}
             />
         );
     }
 
     render () {
-        const example1 = this.mainExample();
+        const mainView = this.main();
         return (
-            <SafeAreaView style={styles.safeArea}>
-                <View style={styles.container}>
-                    <StatusBar
-                      translucent={false}
-                      backgroundColor={'rgba(0, 0, 0, 0.0)'}
-                      barStyle={'dark-content'}
+            <Container>
+                <StatusBar
+                    hidden={true}
+                />
+                { mainView }
+            </Container>
+        );
+    }
+}
+
+
+export class SplashScreen extends Component {
+    constructor (props) {
+        super(props);
+    }
+
+    componentDidMount() {
+        setTimeout(async () => {
+            await AsyncStorage.getItem('@UserData').then((data) => {
+                console.log(data);
+                if(data){
+                    this.props.navigation.navigate('Paranyama');
+                }
+                else {
+                    this.props.navigation.navigate('Welcome');
+                }
+            })
+        }, 2000)
+    }
+
+    render () {
+        return (
+            <ContainerWithPadding
+                style={{
+                    backgroundColor: colors.primaryColor,
+                }}
+            >
+                <StatusBar
+                    hidden={true}
+                />
+                <View
+                    style={{
+                        flex: 1,
+                        alignSelf: 'center',
+                        alignContent: 'center',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}
+                >
+                    <Image source={require("../../statics/images/Logo.png")}
+                        style={{
+                            height: 100,
+                            width: 100
+                        }}
                     />
-                    {/* { this.gradient } */}
-                    { example1 }
+                    <H1
+                    style={{
+                        color: colors.white,
+                    }}
+                    >
+                        Pranayama
+                    </H1>
+                    <ActivityIndicator 
+                        size={Platform.OS === 'ios' ? 'small' : 'large'} 
+                        color={colors.white}
+                        style={{
+                            marginTop: 100
+                        }}
+                        />
                 </View>
-            </SafeAreaView>
+            </ContainerWithPadding>
         );
     }
 }

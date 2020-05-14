@@ -6,7 +6,7 @@ import { Transition } from 'react-native-reanimated';
 import AuthNavigator from "./auth-navigator";
 import HomeNavigator from "./home-navigator";
 import Paranyama from "./app-navigator";
-import ExerciseScreen from '../scenes/pranayama/exercise';
+import Exercise from '../scenes/pranayama/exercise';
 
 
 const RootNavigator = createAnimatedSwitchNavigator(
@@ -14,18 +14,17 @@ const RootNavigator = createAnimatedSwitchNavigator(
         Auth: AuthNavigator,
         Home: HomeNavigator,
         Paranyama: Paranyama,
-        Exercise: ExerciseScreen
+        Exercise: Exercise
     },
     {
         initialRouteName: 'Auth',
         transition: (
             <Transition.Together>
               <Transition.Out
-                type="slide-left"
-                durationMs={400}
-                interpolation="linear"
+                type="fade"
+                interpolation="easeOut"
               />
-              <Transition.In type="slide-right" durationMs={500} />
+              <Transition.In type="fade" />
             </Transition.Together>
           ),
     }

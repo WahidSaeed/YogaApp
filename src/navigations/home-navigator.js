@@ -1,5 +1,6 @@
 import { createStackNavigator } from "react-navigation-stack";
-import HomeScreen  from "../scenes/home/index";
+import ConnectBluetoothScreen  from "../scenes/home/index";
+import HomeScreen from "../scenes/home/testbreath";
 
 const HomeNavigatorConfig = {
     initialRouteName: 'Home',
@@ -8,7 +9,8 @@ const HomeNavigatorConfig = {
 };
 
 const RouteConfigs = {
-    Home: HomeScreen
+    Home: HomeScreen,
+    Connect: ConnectBluetoothScreen,
 };
 
 const HomeNavigator = createStackNavigator(RouteConfigs, HomeNavigatorConfig);

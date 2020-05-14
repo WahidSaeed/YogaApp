@@ -1,79 +1,110 @@
 import React, { Component } from "react";
 import { View, Text, StatusBar, FlatList, TouchableOpacity } from "react-native";
-import styles, { colors } from "../../../styles/index.style";
+import style from "../../../styles/index";
 import Icon from "react-native-vector-icons/AntDesign";
+import { SelectDefault } from "../../../components/common/inputs/Select";
+import { Container } from "../../../components/layout/index";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { PranayamaCourseCreators } from "../../../statemanagement/creators/PranayamaCourse";
+import { DefaultLoading } from "../../../components/common/loader";
+import Modal from "react-native-modal";
+import { metrics, colors } from "../../../styles/index";
 
-const ListItem = ({item, navigation}) => {
-    return (
-        <TouchableOpacity
-                style={{
-                    backgroundColor: '#165BAA',
-                    padding: 16,
-                    paddingHorizontal: 24,
-                    marginVertical: 8,
-                    borderRadius: 32,
-                    flex: 1,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between'
-                }}
-                onPress={() => {
-                    navigation.navigate('Exercise')
-                }}
-            >
-                <Text
-                    style={{
-                        color: '#fff'
-                    }}
-                >
-                    {item.value}
-                </Text>
-                <Icon name="rightcircle" color="#fff" size={16}/>
-            </TouchableOpacity>
-    );
-}
 
-const DATA = [
-    {
-        id: 0,
-        value: 'Relax'
-    },
-    {
-        id: 1,
-        value: 'Get Firery'
-    },
-    {
-        id: 2,
-        value: 'Find Balance'
-    },
-    {
-        id: 3,
-        value: 'Build Resource'
-    }
-]
-
-export default class StateOfMindScreen extends Component {
+class StateOfMindScreen extends Component {
 
     static navigationOptions = {
         title: 'State of Mind',
-      }
+    }
+
+    state = {
+        modalVisible: false,
+        options: []
+    }
+
+    setModalVisible = (modalVisible, options) => {
+        this.setState({ 
+            modalVisible: modalVisible,
+            options: options 
+        })
+    }
+
+    onPranayamaSelect(pranayama) {
+        if(pranayama.options) {
+            this.setModalVisible(true, pranayama.options);
+        }
+        else {
+            const { navigation } = this.props;
+            navigation.navigate('Exercise', { pranayama: pranayama });
+        }
+    }
+
+    componentDidMount() {
+        const { requestExerciseData } = this.props;
+        requestExerciseData(1);
+    }
 
     render() {
-
+        const { payload, isLoading, error } = this.props.pranayamaCourse;
+        const { modalVisible, options } = this.state;
+        console.log(this.props.pranayamaCourse)
         return(
-            <View style={styles.safeArea}>
-                <View style={[styles.container, {
-                    padding: 16
-                }]}>
-                    <FlatList 
-                            data={DATA}
-                            renderItem={({item}) => {
-                                return <ListItem item={item} {...this.props}/>
-                            }}
-                            keyExtractor={item => item.id.toString()}
-                            scrollEnabled={true}
+            <Container>
+                    {error && (<View><Text>Error</Text></View>)}
+                    {isLoading && (<DefaultLoading />)}
+                    {!isLoading && !error && (
+                        <SelectDefault 
+                            data={payload}
+                            isModal={true}
+                            isMultiSelect={false}
+                            onItemSelect={this.onPranayamaSelect.bind(this)}
                         />
-                </View>
-            </View>
+                    )}
+                    <Modal isVisible={modalVisible} 
+                    swipeDirection={['down']}
+                    onSwipeComplete={() => this.setModalVisible(false)}
+                    style={{
+                        margin: 0,
+                        justifyContent: 'flex-end'
+                    }}
+                    >
+                        <View
+                            style={{
+                                minHeight: metrics.getHeightFromDP(30),
+                                maxHeight: metrics.getHeightFromDP(70),
+                                backgroundColor: colors.white,
+                                padding: 24,
+                                justifyContent: 'center',
+                                borderTopLeftRadius: 16,
+                                borderTopRightRadius: 16
+                            }}
+                        >
+                            <View
+                                style={{
+                                    height: 5,
+                                    width: 30,
+                                    backgroundColor: colors.gray,
+                                    borderRadius: 16,
+                                    alignSelf: 'center',
+                                    marginBottom: 18
+                                }}
+                            ></View>
+                            <SelectDefault
+                                isModal={true}
+                                data={options}
+                                onItemSelect={ this.onPranayamaSelect.bind(this) }
+                            />
+                        </View>
+                </Modal>
+            </Container>
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return { pranayamaCourse: state.pranayamaCourse }
+}
+const mapDispatchToProps = (dispatch) => bindActionCreators(PranayamaCourseCreators, dispatch)
+
+export default connect(mapStateToProps, mapDispatchToProps)(StateOfMindScreen)
